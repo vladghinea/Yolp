@@ -58,7 +58,7 @@ def add():
     data_handler.write_data(QUESTIONS_FILE_PATH ,old_data, QUESTIONS_HEADER)
     # new_image = request.files['image']
     # new_image.save('./static/images')
-    return redirect("/question/{{old_data['id']}}")
+    return redirect(f"/question/{new_dict['id']}")
 
 
 
