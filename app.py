@@ -20,25 +20,55 @@ def list_page():
     questions = questions[::-1]
     return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER )
 
-@app.route("/question/<question_id>")
+@app.route("/question/<question_id>", methods=['GET', 'POST'])
 def question_page(question_id):
-    show_question= {}
-    show_answer= []
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     answers = data_handler.get_data(ANSWERS_FILE_PATH)
-    for question in questions:
-        if question['id'] == question_id:
-            show_question = question
-    for answer in answers:
-        if answer['question_id'] == question_id:
-            show_answer.append(answer)
-    return render_template("question.html", question=show_question, answers=show_answer ,q_header=QUESTIONS_HEADER )
+    show_question = {}
+    show_answer = []
+    if request.method == "GET":
+
+        for question in questions:
+            if question['id'] == question_id:
+                show_question = question
+
+        for answer in answers:
+            if answer['question_id'] == question_id:
+                show_answer.append(answer)
+
+
+        return render_template("question.html", question=show_question, answers=show_answer ,q_header=QUESTIONS_HEADER )
+    else:
+        dict_answers= {}
+        for ans in show_answer:
+            print(ans)
+
+        for question in questions:
+            if question['id'] == question_id:
+                show_question = question
+
+        for answer in answers:
+            if answer['question_id'] == question_id:
+                show_answer.append(answer)
+
+        new_answer = request.form
+
+
+        dict_answers['id']= str(len(show_answer)+1)
+        dict_answers['submission_time'] = ""
+        dict_answers['vote_number'] = ""
+        dict_answers['question_id'] = question_id
+        for k, v in new_answer.items():
+            dict_answers[k] = v
+        dict_answers['image'] = ""
+        show_answer.append(dict_answers)
+
+
+        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
 
 @app.route("/add-question")
 def add_question_page():
     return render_template('add_question.html')
-
-
 
 
 @app.route("/add", methods=['POST'])
@@ -60,7 +90,14 @@ def add():
     # new_image.save('./static/images')
     return redirect(f"/question/{new_dict['id']}")
 
+@app.route('/question/<question_id>/new-answer', methods=['GET','POST'])
+def answer_page(question_id):
+    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
+    for question in questions:
+        if question['id'] == question_id:
+            show_question= question
 
+    return render_template('answer.html', question=show_question)
 
 
 

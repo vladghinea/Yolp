@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <h3>{{ question.title}}</h3>
+    <br />
+    <div class="container">
+        <p> {{ question.message }}</p>
+    </div>
+      <hr>
+        <form action="/question/{{question['id']}}" method="post">
+            <textarea name="message" cols="30" rows="5" placeholder="your answer"></textarea>
+            <input type="submit" value="send">
+        </form>
+</body>
+</html>
