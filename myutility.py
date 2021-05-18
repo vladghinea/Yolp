@@ -1,8 +1,8 @@
 from datetime import datetime
 
 
-def init_answer_and_question(new_item, length_item, q, question_id=0):
-    if q == "a":
+def init_answer_and_question(new_item, length_item, item_type, question_id=0):
+    if item_type == "a":
         dict_answers = dict()
         dict_answers['id'] = str(len(length_item) + 1)
         time = datetime.now()
@@ -14,7 +14,7 @@ def init_answer_and_question(new_item, length_item, q, question_id=0):
             dict_answers[k] = v
         return dict_answers
 
-    elif q == "q":
+    elif item_type == "q":
         dict_question = dict()
         dict_question['id'] = str(len(length_item) + 1)
         time = datetime.now()
@@ -28,6 +28,16 @@ def init_answer_and_question(new_item, length_item, q, question_id=0):
     else:
         pass
 
+def edit_question_and_answer(new_item, length_item, item_type, id):
+    if item_type == 'q':
+        for question in length_item:
+            if question['id'] == id:
+                question['title'] = new_item['title']
+                question['message'] = new_item['message']
+        return length_item
+    elif item_type == 'a':
+        pass
+
 
 def add_view(item):
     pass
@@ -36,6 +46,8 @@ def add_view(item):
 def add_vote(item, id, question_id):
     vote = int(item['vote_number'])
     return vote
+
+
 
 
 

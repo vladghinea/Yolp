@@ -12,6 +12,7 @@
         <p> {{ question.message }}</p>
     </div>
     <p>views: {{ question.view_number }}</p>
+    <button onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
     <br><hr>
 
     {% for answer in answers  %}
@@ -23,7 +24,8 @@
         {%  if answer.image %}
         <img src="{{ answer.image }}" alt="">
         {% endif %}
-        <span>vote: {{ answer.vote_number }}</span><button onclick="">+vote</button>
+        <button onclick="window.location='/answer/{{ answer.id }}/delete'">delete</button>
+        <span>vote: {{ answer.vote_number }}</span><button onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'">+vote</button>
     </div>
     {% endfor %}
 

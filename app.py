@@ -43,6 +43,20 @@ def delete_question(question_id):
     return redirect("/list")
 
 
+@app.route('/question/<question_id>/edit', methods=['GET','POST'])
+def edit_question_page(question_id):
+    if request.method == 'POST':
+        questions= data_handler.get_data(QUESTIONS_FILE_PATH)
+        edit_question = request.form
+        new_questions = myutility.edit_question_and_answer(edit_question,questions,'q',question_id)
+        data_handler.write_data(QUESTIONS_FILE_PATH, new_questions, QUESTIONS_HEADER)
+        return redirect(f'/question/{question_id}')
+    elif request.method == 'GET':
+        questions= data_handler.get_data(QUESTIONS_FILE_PATH)
+        for question in questions:
+            if question['id'] == question_id:
+                return render_template('edit_question.html', question=question, question_id=question_id )
+
 
 @app.route("/question/<question_id>", methods=['GET', 'POST'])
 def question_page(question_id):
@@ -92,7 +106,6 @@ def add():
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def answer_page(question_id):
-    print("refresh pe pagina new-answer")
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     for question in questions:
         if question['id'] == question_id:
@@ -100,6 +113,29 @@ def answer_page(question_id):
 
     return render_template('answer.html', question=show_question)
 
+
+@app.route('/answer/<answer_id>/delete')
+def delete_answer_page(answer_id):
+    question_id = 0
+    answers = data_handler.get_data(ANSWERS_FILE_PATH)
+    for answer in answers:
+        if answer['id'] == answer_id:
+            question_id = answer["question_id"]
+            answers.remove(answer)
+    data_handler.write_data(ANSWERS_FILE_PATH,answers,ANSWERS_HEADER)
+    return redirect(f'/question/{question_id}')
+
+@app.route('/add_vote')
+def add_vote_page():
+    if request.args['type_vote'] == 'question':
+        pass
+    elif request.args['type_vote'] == 'answer':
+        answers = data_handler.get_data(ANSWERS_FILE_PATH)
+        for answer in answers:
+            if answer['id'] == request.args['name']:
+                answer['vote_number']= str(int(answer['vote_number']) +1)
+        data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
+        return redirect(f"/question/{request.args['id']}")
 
 if __name__ == "__main__":
     app.config["UPLOAD_FOLDER"] = "/static/images"
