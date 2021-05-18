@@ -16,32 +16,22 @@
 <body>
 <div class="center">
 <a href="/add-question" class="btn-floating blue pulse"> add </a>
-<div class="card-panel hoverable">
-
-
-            {% for question in questions %}
-                <div class=" col s12 16">
-
-                    <div class="card-panel hoverable teal lighten-5" onclick="window.location='/question/{{question['id']}}'">
-                    <h5>{{ question.title }}</h5>
-                        <hr class="light-grey light2">
-                        <p>{{ question.message }}</p>
-                        <div class="card-action" style=" width: max-content">
-                        <a href="#" class="left">views:<span class="blue-text">{{ question.view_number }}</span></a>
-                        <a href="#" class="right-align " style="margin: 0 0 0 70vh" >         vote:<span class="blue-text">{{ question.vote_number }}</span></a>
-                        </div>
-
-
+    <div class="card-panel hoverable">
+        {% for question in questions %}
+            <div class=" col s12 16">
+                <div class="card-panel hoverable teal lighten-5" onclick="window.location='/question/{{question['id']}}'">
+                <h5>{{ question.title }}</h5>
+                    <hr class="light-grey light2">
+                    <p>{{ question.message }}</p>
+                    <div class="card-action" style=" width: max-content">
+                    <a href="#" class="left">views:<span class="blue-text">{{ question.view_number }}</span></a>
+                        <a href="#" class="right-align " style="margin: 0 0 0 70vh" >         vote:<span class="blue-text">{{ question.vote_number }}</span><button onclick="">+vote</button></a>
                     </div>
-
                 </div>
-            {% endfor %}
-            </tbody>
-
-
-        </table>
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

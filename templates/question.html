@@ -23,7 +23,7 @@
         {%  if answer.image %}
         <img src="{{ answer.image }}" alt="">
         {% endif %}
-        <span>vote: {{ answer.vote_number }}</span>
+        <span>vote: {{ answer.vote_number }}</span><button onclick="">+vote</button>
     </div>
     {% endfor %}
 
