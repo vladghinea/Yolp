@@ -1,24 +1,21 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<div class="container">
-    <h3>{{ question.title}}</h3>
-    <br />
-    <div class="container">
+{% extends 'base.html' %}
+{% block title %}
+  question
+{% endblock %}
+{%  block content %}
+    <div class="s1 m6 l6 align-center p4" >
+    <h3 class="center-align p25 ">{{ question.title}}</h3>
+     <br />
+    </div>
+
+    <div>
         <p> {{ question.message }}</p>
     </div>
     <p>views: {{ question.view_number }}</p>
     <br><hr>
 
     {% for answer in answers  %}
-    <div class="container">
+    <div>
         <h5>answer:</h5>
         <p>
             {{ answer.message }}
@@ -30,7 +27,6 @@
     </div>
     {% endfor %}
 
-</div>
-<a href="/question/{{ question.id }}/new-answer" class="button"> add answer </a>
-</body>
-</html>
+
+<a href="/question/{{ question.id }}/new-answer" class="btn-floating blue pulse"> add </a>
+{% endblock %}

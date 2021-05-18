@@ -1,23 +1,27 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-
-<form action="/add" method="POST">
+{% extends 'base.html' %}
+{% block title %}
+  add question
+{% endblock %}
+{%  block content %}
+<h3 class="grey-text text-lighten-1">add a question</h3>
+<form action="/add" method="POST" class="col s12">
     <input type="text" name="title" placeholder="Title">
     <br>
-    <textarea name="message" cols="30" rows="5" placeholder="message"></textarea>
+    <label for="input_question_area">your new question</label>
     <br>
-    <input type="file" name="image" id="file_upload">
+    <textarea name="message" id="input_question_area" cols="60" rows="70" placeholder="message"></textarea>
     <br>
-    <input type="submit" value="trimite">
+    <div class="file-field input-field">
+    <div class=" btn-small pink">
+        <i class="material-icons right">folder</i> add image
+        <input type="file" name="image">
+    </div>
+        <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+
+    <button class="btn indigo" type="submit" > <span>send</span> <i class="material-icons right">send</i>
 </form>
 
-</body>
-</html>
+{% endblock %}

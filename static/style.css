@@ -1,0 +1,23 @@
+body {
+    background: gold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: gold;
+    padding: 0px 20px;
+}
+
+
+a {
+    color: #373537;
+}

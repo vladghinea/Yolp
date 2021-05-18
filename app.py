@@ -62,7 +62,8 @@ def question_page(question_id):
             dict_answers[k] = v
         dict_answers['image'] = ""
         show_answer.append(dict_answers)
-
+        answers.append(dict_answers)
+        data_handler.write_data(ANSWERS_FILE_PATH,answers,ANSWERS_HEADER)
 
         return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
 
