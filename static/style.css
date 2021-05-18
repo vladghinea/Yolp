@@ -9,6 +9,16 @@ body {
 
 
 .center {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: gold;
+    padding: 0px 20px;
+}
+.center-list {
+    margin-top: 150px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -17,7 +27,24 @@ body {
     padding: 0px 20px;
 }
 
-
 a {
     color: #373537;
+}
+
+nav{
+    position: fixed;
+    overflow: hidden;
+    z-index: 1;
+    top: 0;
+}
+
+#exterior-button{
+    position: fixed;
+    top: 100px;
+    left: 400px;
+    text-align: center;
+    padding: 0;
+
+
+
 }

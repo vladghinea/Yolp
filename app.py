@@ -25,12 +25,21 @@ def list_page():
 def delete_question(question_id):
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     answers = data_handler.get_data(ANSWERS_FILE_PATH)
+    new_answers=[]
     for question in questions:
         if question['id'] == question_id:
             for answer in answers:
-                if answer['question_id'] == question_id:
-                    answers.remove(answer)
+                if answer['question_id'] != question_id:
+                    new_answers.append(answer)
+                    print("intru in answers si stergem pe aia de jos")
+
+            for answer in new_answers:
+                if answer['question_id'] > question_id:
+                    answer['question_id'] = int(answer['question_id']) - 1
+                    print('intru in answers si modificam q_id-ul')
             questions.remove(question)
+    data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
+    data_handler.write_data(ANSWERS_FILE_PATH, new_answers, ANSWERS_HEADER)
     return redirect("/list")
 
 
@@ -47,7 +56,7 @@ def question_page(question_id):
                 show_answer.append(answer)
 
         new_answer = request.form
-        dict_answers = myutility.init_answer_and_question(new_answer, show_answer, "a", question_id)
+        dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", question_id)
         show_answer.append(dict_answers)
         answers.append(dict_answers)
         data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)

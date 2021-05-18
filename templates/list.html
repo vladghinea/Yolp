@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href={{ url_for ('static', filename='style.css') }}>
     <title>
@@ -14,8 +15,19 @@
     </title>
 </head>
 <body>
-<div class="center">
-<a href="/add-question" class="btn-floating blue pulse"> add </a>
+<nav>
+    <div class="nav-wrapper blue">
+      <a href="#" class="brand-logo">yolp</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#"><i class="material-icons left">search</i>search</a></li>
+        <li><a href="#"><i class="material-icons right">view_module</i>list order</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<a href="/add-question" id="exterior-button" class="btn-floating btn waves-effect waves-light blue"><i class="material-icons">add</i></a>
+<div class="center-list">
+
     <div class="card-panel hoverable">
         {% for question in questions %}
             <div class=" col s12 16">

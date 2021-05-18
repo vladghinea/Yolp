@@ -13,7 +13,10 @@ def get_data(ourfile):
 
 def write_data(ourfile, data, header):
     with open (ourfile, 'w') as mydata:
+
         mydata = csv.DictWriter(mydata, fieldnames=header)
         mydata.writeheader()
+        for item in data:
+            item["id"] = data.index(item) + 1
         for line in data:
             mydata.writerow(line)
