@@ -4,12 +4,12 @@
 {% endblock %}
 {%  block content %}
     <div class="s1 m6 l6 align-center p4" >
-        <h3 class="center-align p25 ">{{ question.title}}</h3>
+        <h4 class="center-align p25 ">{{ question.title}}</h4>
         <br />
     </div>
 
     <div>
-        <p> {{ question.message }}</p>
+        <h5> {{ question.message }}</h5>
     </div>
     <p>views: {{ question.view_number }}</p>
     <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
@@ -17,10 +17,10 @@
 
     {% for answer in answers  %}
         <div>
-            <h5>answer:</h5>
-            <p>
+            <p>answer:</p>
+            <h5>
                 {{ answer.message }}
-            </p>
+            </h5>
             {%  if answer.image %}
             <img src="{{ answer.image }}" alt="">
             {% endif %}
