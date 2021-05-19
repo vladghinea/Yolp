@@ -21,6 +21,8 @@ def list_page():
         order = request.args['order']
         questions = myutility.sorting(order, questions)
         print(questions)
+    if request.args['type'] == 'desc':
+        questions = questions[::-1]
 
     return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
 

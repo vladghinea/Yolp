@@ -18,21 +18,32 @@
 <nav>
 
 <ul id="dropdown1" class="dropdown-content">
-  <li><a href="/list?order=title">one</a></li>
-  <li><a href="#!">two</a></li>
-  <li class="divider"></li>
-  <li><a href="#!">three</a></li>
+    <li><a href="/list?order=title&type=asc">Title</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=message&type=asc">Message</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=submission_time&type=asc">Time</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=view_number&type=asc">Views</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=vote_number&type=asc">Votes</a></li>
+</ul>
+<ul id="dropdown2" class="dropdown-content">
+    <li><a href="/list?order=title&type=desc">Title</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=message&type=desc">Message</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=submission_time&type=desc">Time</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=view_number&type=desc">Views</a></li>
+    <li class="divider"></li>
+    <li><a href="/list?order=vote_number&type=desc">Votes</a></li>
 </ul>
         <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="margin-left: 18vh">yolp</a>
       <ul class="right hide-on-med-and-down">
-          <li><a href="/list?type=asc"><i class="material-icons left">arrow_downward</i></a></li>
-          <li><a href="/list?type=desc"><i class="material-icons left">arrow_upward</i></a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Title</a></li>
-          <li><a href="/list?order=message">Message</a></li>
-          <li><a href="/list?order=submission_time">Time</a></li>
-          <li><a href="/list?order=view_number">Views</a></li>
-          <li><a href="/list?order=vote_number">Votes</a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1"><i class="material-icons left">arrow_downward</i></a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown2"><i class="material-icons left">arrow_upward</i></a></li>
       </ul>
     </div>
   </nav>
