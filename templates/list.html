@@ -17,7 +17,7 @@
 <body>
 <nav>
     <div class="nav-wrapper blue">
-      <a href="#" class="brand-logo">yolp</a>
+      <a href="/list" class="brand-logo" style="margin-left: 18vh">yolp</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="#"><i class="material-icons left">search</i>search</a></li>
         <li><a href="#"><i class="material-icons right">view_module</i>list order</a></li>
@@ -36,8 +36,8 @@
                     <hr class="light-grey light2">
                     <p>{{ question.message }}</p>
                     <div class="card-action" style=" width: max-content">
-                    <a href="#" class="left">views:<span class="blue-text">{{ question.view_number }}</span></a>
-                        <a href="#" class="right-align " style="margin: 0 0 0 70vh" >         vote:<span class="blue-text">{{ question.vote_number }}</span><button onclick="">+vote</button></a>
+                    <button class="btn-floating white waves-effect waves-light"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="margin-left: 10px">{{ question.view_number }}</span>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&id={{ question.id }}'" style="margin-left: 70vh"> <i class="material-icons teal-text  text-lighten-4">favorite</i></button><span class="blue-text " style="margin-left: 10px">{{ question.vote_number }}</span>
                     </div>
                 </div>
             </div>
