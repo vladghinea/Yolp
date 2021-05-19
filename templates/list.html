@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href={{ url_for ('static', filename='style.css') }}>
+{#    <link rel="stylesheet" href={{ url_for ('static', filename='style.css') }}>#}
     <title>
         {% block title %}
 
@@ -15,19 +15,20 @@
     </title>
 </head>
 <body>
+<nav>
+
 <ul id="dropdown1" class="dropdown-content">
-  <li><a href="#!">one</a></li>
+  <li><a href="/list?order=title">one</a></li>
   <li><a href="#!">two</a></li>
   <li class="divider"></li>
   <li><a href="#!">three</a></li>
 </ul>
-<nav>
         <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="margin-left: 18vh">yolp</a>
       <ul class="right hide-on-med-and-down">
           <li><a href="/list?type=asc"><i class="material-icons left">arrow_downward</i></a></li>
           <li><a href="/list?type=desc"><i class="material-icons left">arrow_upward</i></a></li>
-          <li><a class="dropdown-trigger" href="/list?order=title" data-activates="dropdown1">Title</a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Title</a></li>
           <li><a href="/list?order=message">Message</a></li>
           <li><a href="/list?order=submission_time">Time</a></li>
           <li><a href="/list?order=view_number">Views</a></li>
@@ -49,8 +50,8 @@
                     <div class="card-action" style=" width: max-content">
                         <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
                     <button class="btn-floating white waves-effect waves-light"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="margin-left: 10px">{{ question.view_number }}</span>
-                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=plus'" style="position: absolute; right: 0; margin:  0 140px 0px 5px; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 0; margin:  0 110px 0px 5px;padding-top: 10px;padding-right: 5px">{{ question.vote_number }}</span>
-                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=minus'" style="position: absolute; right: 0; margin: 0 60px 0px 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=plus'" style="position: absolute; right: 0; margin:  0 140px 0px 5px;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 0; margin:  0 110px 0px 5px;padding-top: 10px;padding-right: 5px">{{ question.vote_number }}</span>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=minus'" style="position: absolute; right: 0; margin: 0 60px 0px 5px;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
 
                     </div>
                 </div>
@@ -58,12 +59,13 @@
         {% endfor %}
     </div>
 </div>
-<script src="jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     $( document ).ready(function(){
         $(".dropdown-trigger").dropdown();
     })
 </script>
+
 </body>
 </html>
