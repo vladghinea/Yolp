@@ -15,12 +15,19 @@
     </title>
 </head>
 <body>
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="#!">one</a></li>
+  <li><a href="#!">two</a></li>
+  <li class="divider"></li>
+  <li><a href="#!">three</a></li>
+</ul>
 <nav>
-    <div class="nav-wrapper blue">
+        <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="margin-left: 18vh">yolp</a>
       <ul class="right hide-on-med-and-down">
-          <li><i class="material-icons left">sort</i>sort by:</li>
-          <li><a href="/list?order=title">Title</a></li>
+          <li><a href="/list?type=asc"><i class="material-icons left">arrow_downward</i></a></li>
+          <li><a href="/list?type=desc"><i class="material-icons left">arrow_upward</i></a></li>
+          <li><a class="dropdown-trigger" href="/list?order=title" data-activates="dropdown1">Title</a></li>
           <li><a href="/list?order=message">Message</a></li>
           <li><a href="/list?order=submission_time">Time</a></li>
           <li><a href="/list?order=view_number">Views</a></li>
@@ -51,6 +58,12 @@
         {% endfor %}
     </div>
 </div>
+<script src="jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    $( document ).ready(function(){
+        $(".dropdown-trigger").dropdown();
+    })
+</script>
 </body>
 </html>
