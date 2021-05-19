@@ -1,4 +1,14 @@
 from datetime import datetime
+import data_handler
+import os
+from operator import itemgetter
+
+
+ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
+QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
+
+ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 
 
 def init_answer_and_question(new_item, length_item, item_type, question_id=0):
@@ -23,7 +33,10 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_question['view_number'] = "0"
         dict_question['vote_number'] = "0"
         for k, v in new_item.items():
-            dict_question[k] = v
+            if k == 'title':
+                dict_question[k] = v.capitalize()
+            else:
+                dict_question[k] = v
         return  dict_question
     else:
         pass
@@ -39,13 +52,48 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
         pass
 
 
-def add_view(item):
-    pass
+def sorting(order, questions):
+    if order == 'title':
+        ordered_questions = sorted(questions,key=itemgetter('title'))
+        return ordered_questions
+    elif order == 'message':
+        pass
+    elif order == "submission_time":
+        ordered_questions = sorted(questions, key=itemgetter('submission_time'))
+        return ordered_questions
+    elif order == 'view_number':
+        ordered_questions = sorted(questions, key=itemgetter('view_number'))
+        return ordered_questions
+    elif order == 'vote_number':
+        ordered_questions = sorted(questions, key=itemgetter('vote_number'))
+        return ordered_questions
+    else:
+        return questions
 
 
-def add_vote(item, id, question_id):
-    vote = int(item['vote_number'])
-    return vote
+
+
+def add_vote(request_args):
+    if request_args['type_vote'] == 'question':
+        questions = data_handler.get_data(QUESTIONS_FILE_PATH)
+        for question in questions:
+            if question["id"] == request_args['name']:
+                if request_args["operation"] == "plus":
+                    question['vote_number'] = str(int(question["vote_number"]) + 1)
+                elif request_args["operation"] == "minus":
+                    question['vote_number'] = str(int(question["vote_number"]) - 1)
+        data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
+        return "/list"
+    elif request_args['type_vote'] == 'answer':
+        answers = data_handler.get_data(ANSWERS_FILE_PATH)
+        for answer in answers:
+            if answer['id'] == request_args['name']:
+                if request_args["operation"] == "plus":
+                    answer['vote_number'] = str(int(answer['vote_number']) + 1)
+                elif request_args["operation"] == "minus":
+                    answer['vote_number'] = str(int(answer['vote_number']) - 1)
+        data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
+        return f"/question/{request_args['id']}"
 
 
 

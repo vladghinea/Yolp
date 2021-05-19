@@ -17,8 +17,13 @@ app = Flask(__name__)
 @app.route("/list")
 def list_page():
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
-    questions = questions[::-1]
+    if request.args:
+        order = request.args['order']
+        questions = myutility.sorting(order, questions)
+        print(questions)
+
     return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
+
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
@@ -62,6 +67,7 @@ def edit_question_page(question_id):
 def question_page(question_id):
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     answers = data_handler.get_data(ANSWERS_FILE_PATH)
+
     show_question = {}
     show_answer = []
     if request.method == "POST":
@@ -79,6 +85,8 @@ def question_page(question_id):
     else:
         for question in questions:
             if question['id'] == question_id:
+                question['view_number'] = str(int(question["view_number"]) + 1)
+                data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
                 show_question = question
 
         for answer in answers:
@@ -127,15 +135,11 @@ def delete_answer_page(answer_id):
 
 @app.route('/add_vote')
 def add_vote_page():
-    if request.args['type_vote'] == 'question':
-        pass
-    elif request.args['type_vote'] == 'answer':
-        answers = data_handler.get_data(ANSWERS_FILE_PATH)
-        for answer in answers:
-            if answer['id'] == request.args['name']:
-                answer['vote_number']= str(int(answer['vote_number']) +1)
-        data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
-        return redirect(f"/question/{request.args['id']}")
+    request_args = request.args
+    direction = myutility.add_vote(request_args)
+    return redirect(direction)
+
+
 
 if __name__ == "__main__":
     app.config["UPLOAD_FOLDER"] = "/static/images"

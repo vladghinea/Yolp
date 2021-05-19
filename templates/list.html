@@ -19,25 +19,32 @@
     <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="margin-left: 18vh">yolp</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#"><i class="material-icons left">search</i>search</a></li>
-        <li><a href="#"><i class="material-icons right">view_module</i>list order</a></li>
+          <li><i class="material-icons left">sort</i>sort by:</li>
+          <li><a href="/list?order=title">Title</a></li>
+          <li><a href="/list?order=message">Message</a></li>
+          <li><a href="/list?order=submission_time">Time</a></li>
+          <li><a href="/list?order=view_number">Views</a></li>
+          <li><a href="/list?order=vote_number">Votes</a></li>
       </ul>
     </div>
   </nav>
 
-<a href="/add-question" id="exterior-button" class="btn-floating btn waves-effect waves-light blue"><i class="material-icons">add</i></a>
+<a href="/add-question" id="exterior-button" class="btn-floating btn waves-effect waves-light blue" style="z-index: 0"><i class="material-icons">add</i></a>
 <div class="center-list">
 
     <div class="card-panel hoverable">
         {% for question in questions %}
             <div class=" col s12 16">
-                <div class="card-panel hoverable teal lighten-5" onclick="window.location='/question/{{question['id']}}'">
-                <h5>{{ question.title }}</h5>
+                <div class="card-panel hoverable teal lighten-5">
+                <h5><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
                     <hr class="light-grey light2">
                     <p>{{ question.message }}</p>
                     <div class="card-action" style=" width: max-content">
+                        <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
                     <button class="btn-floating white waves-effect waves-light"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="margin-left: 10px">{{ question.view_number }}</span>
-                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&id={{ question.id }}'" style="margin-left: 70vh"> <i class="material-icons teal-text  text-lighten-4">favorite</i></button><span class="blue-text " style="margin-left: 10px">{{ question.vote_number }}</span>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=plus'" style="position: absolute; right: 0; margin:  0 140px 0px 5px; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 0; margin:  0 110px 0px 5px;padding-top: 10px;padding-right: 5px">{{ question.vote_number }}</span>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=minus'" style="position: absolute; right: 0; margin: 0 60px 0px 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+
                     </div>
                 </div>
             </div>
