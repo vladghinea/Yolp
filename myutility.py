@@ -60,7 +60,8 @@ def sorting(order, questions):
         ordered_questions = sorted(questions,key=itemgetter('title'))
         return ordered_questions
     elif order == 'message':
-        pass
+        ordered_questions = sorted(questions, key=itemgetter('answers'))
+        return ordered_questions
     elif order == "submission_time":
         ordered_questions = sorted(questions, key=itemgetter('submission_time'))
         return ordered_questions

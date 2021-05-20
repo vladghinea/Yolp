@@ -163,12 +163,18 @@ def answer_page(question_id):
 
 @app.route('/answer/<answer_id>/delete')
 def delete_answer_page(answer_id):
+    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     question_id = 0
     answers = data_handler.get_data(ANSWERS_FILE_PATH)
     for answer in answers:
         if answer['id'] == answer_id:
             question_id = answer["question_id"]
+            for question in questions:
+                if question["id"] == answer['question_id']:
+                    question['answers'] = int(question['answers']) - 1
+            data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
             answers.remove(answer)
+
     data_handler.write_data(ANSWERS_FILE_PATH,answers,ANSWERS_HEADER)
     return redirect(f'/question/{question_id}')
 
