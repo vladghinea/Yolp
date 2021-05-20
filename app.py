@@ -14,7 +14,9 @@ QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answ
 
 app = Flask(__name__)
 
-app.config['IMAGE_UPLOADS'] = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads'
+vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
+lamine = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
+app.config['IMAGE_UPLOADS'] = lamine
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")

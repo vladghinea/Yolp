@@ -59,8 +59,20 @@
                     <p class="time" > {{ time(question.submission_time) }}</p>
                 <h5 ><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
                     <hr class="light-grey light2">
-                    <p>{{ question.message }}</p>
-                    <div class="card-action" >
+                    <div class="s12 m2 l2 row ">
+
+                        <div class="col left">
+                            <div class="card" style="padding: 5px;">
+                    <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="70px" style=" margin-top: 5px; padding: 0";>
+                                </div>
+                            </div>
+                            <div class="col  container" style="height: 70px; margin: 0; padding: 0;">
+
+                    <p class=" left" style="height: 70px; margin: 0; padding: 0;">{{ question.message }}</p>
+
+                            </div>
+                    </div>
+                    <div class="card-action"  >
                         <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
                     <button class="btn-floating white waves-effect waves-light"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="margin-left: 10px">{{ question.view_number }}</span>
                         <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=plus'" style="position: static; margin-left: 67%; "> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: static; padding-top: 10px;padding-left: 5px">{{ question.vote_number }}</span>
