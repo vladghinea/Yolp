@@ -8,7 +8,7 @@ ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.enviro
 QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answers', 'title', 'message', 'image']
 
 
 def init_answer_and_question(new_item, length_item, item_type, question_id=0):
@@ -20,6 +20,7 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_answers['submission_time'] = str(submission_time)
         dict_answers['vote_number'] = "0"
         dict_answers['question_id'] = question_id
+        dict_answers['answers'] = "0"
         for k, v in new_item.items():
             dict_answers[k] = v
         return dict_answers
@@ -47,7 +48,7 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
             if question['id'] == id:
                 question['title'] = new_item['title']
                 question['message'] = new_item['message']
-                if 'image' in new_item.keys():
+                if 'image' in new_item:
                     question['image'] = new_item['image']
         return length_item
     elif item_type == 'a':
@@ -97,6 +98,7 @@ def add_vote(request_args):
         data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
         return f"/question/{request_args['id']}"
 
+
 def allowed_image_files(filename, allowed_extensions):
     if not '.' in filename:
         return False
@@ -107,7 +109,13 @@ def allowed_image_files(filename, allowed_extensions):
         return False
 
 
+def field_message_in_questions(questions, answers):
 
+    for question in questions:
+        for answer in answers:
+            if answer['question_id'] == question['id']:
+                question['answers'] = int(question['answers']) + 1
+    return questions
 
 
 

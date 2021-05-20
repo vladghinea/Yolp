@@ -7,7 +7,7 @@ ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.enviro
 QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'answers', 'image']
 
 
 
@@ -70,6 +70,9 @@ def edit_question_page(question_id):
             if not myutility.allowed_image_files(image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
                 print("file doesn't have the right extension")
                 return redirect(f'/question/{question_id}')
+
+            new_questions[int(question_id)-1]['image']= image.filename
+            data_handler.write_data(QUESTIONS_FILE_PATH, new_questions, QUESTIONS_HEADER)
             image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         return redirect(f'/question/{question_id}')
 
@@ -103,6 +106,7 @@ def question_page(question_id):
         for question in questions:
             if question['id'] == question_id:
                 question['view_number'] = str(int(question["view_number"]) + 1)
+
                 data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
                 show_question = question
 
@@ -128,6 +132,7 @@ def add():
     data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
     if request.files:
         image = request.files['image']
+
         if image.filename == '':
             print('image must have a name')
             return redirect(f"/question/{new_dict['id']}")
@@ -136,6 +141,8 @@ def add():
             print("file doesn't have the right extension")
             return redirect(f"/question/{new_dict['id']}")
 
+        old_data[-1]['image'] = image.filename
+        data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
         image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
     return redirect(f"/question/{new_dict['id']}")
 

@@ -15,7 +15,7 @@
     <p>views: {{ question.view_number }}</p>
 
 {#    {% if question.image %}#}
-    <img src="/static/images/uploads/{{ question['image'] }}" alt="">
+    <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="330px">
 {#    {% endif %}#}
     </div>
     <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
