@@ -102,9 +102,11 @@ def question_page(question_id):
         answers.append(dict_answers)
         if request.files:
             image = request.files['image']
-            show_answer[-1]['image'] = image.filename
-            answers[-1]['image'] = image.filename
-            image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
+            if "image" in image:
+                show_answer[-1]['image'] = image.filename
+                answers[-1]['image'] = image.filename
+
+                image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
 
 
         for question in questions:
