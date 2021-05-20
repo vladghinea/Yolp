@@ -1,6 +1,6 @@
 id,submission_time,view_number,vote_number,answers,title,message,image
-1,1493368154,105,17,5,How to make lists in Python?,"I am totally new to this, any hints?",
-2,1493068124,32,17,2,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
+1,1493368154,110,17,7,How to make lists in Python?,"I am totally new to this, any hints?",
+2,1493068124,32,17,1,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
 
 I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
 
@@ -12,9 +12,9 @@ app.js (bundled file with webpack, including jquery)",images/image1.png
 3,1493015432,1369,59,1,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
 
 This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
-4,1621335802,23,22,1,Alta intrebare,"da ma, da! sa calificat Rapidul in A",stema-rapid.jpg
-5,1621429210,25,17,1,Question cu imagine,aici adaug imagine cu vampiri,vampire-girl.jpg
-6,1621445879,6,6,0,O intrebare fara imagine,"nu avem imagine
+4,1621335802,24,22,1,Alta intrebare,"da ma, da! sa calificat Rapidul in A",stema-rapid.jpg
+5,1621429210,31,17,0,Question cu imagine,aici adaug imagine cu vampiri,vampire-girl.jpg
+6,1621445879,8,6,0,O intrebare fara imagine,"nu avem imagine
 o sa adaug o imagine eu, acum",menu.jpg
-7,1621451037,34,7,1,Bran,mesaj cu imagine,menu.jpg
-8,1621493477,18,4,1,Catelus,cu mingea,look.jpg
+7,1621451037,34,7,0,Bran,mesaj cu imagine,menu.jpg
+8,1621493477,30,4,2,Catelus,cu mingea,look.jpg

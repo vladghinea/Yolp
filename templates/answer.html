@@ -11,9 +11,18 @@
         <p> {{ question.message }}</p>
     </div>
       <hr>
-        <form action="/question/{{question['id']}}" method="post">
+        <form action="/question/{{question['id']}}" method="post" enctype="multipart/form-data">
             <label for="question_message_area" class="active">your answer for this question</label>
             <textarea class="materialize-textarea" id="question_message_area" name="message" cols="30" rows="5" placeholder="your answer here"></textarea>
+            <div class="file-field input-field">
+    <div class=" btn-small pink">
+        <i class="material-icons right">folder</i> add image
+        <input type="file" name="image" id="image" formenctype="multipart/form-data">
+    </div>
+        <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
             <button class="btn indigo" type="submit" > <span>create answer</span> <i class="material-icons right">send</i>
         </form>
 {% endblock %}

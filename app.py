@@ -14,7 +14,7 @@ QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answ
 
 app = Flask(__name__)
 
-app.config['IMAGE_UPLOADS'] = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
+app.config['IMAGE_UPLOADS'] = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads'
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
@@ -100,6 +100,12 @@ def question_page(question_id):
         dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", question_id)
         show_answer.append(dict_answers)
         answers.append(dict_answers)
+        if request.files:
+            image = request.files['image']
+            show_answer[-1]['image'] = image.filename
+            answers[-1]['image'] = image.filename
+            image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
+
 
         for question in questions:
             if question["id"] == question_id:
