@@ -20,7 +20,6 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_answers['submission_time'] = str(submission_time)
         dict_answers['vote_number'] = "0"
         dict_answers['question_id'] = question_id
-        dict_answers['answers'] = "0"
         for k, v in new_item.items():
             dict_answers[k] = v
         return dict_answers
@@ -33,6 +32,7 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_question['submission_time'] = str(submission_time)
         dict_question['view_number'] = "0"
         dict_question['vote_number'] = "0"
+        dict_question['answers'] = "0"
         for k, v in new_item.items():
             if k == 'title':
                 dict_question[k] = v.capitalize()

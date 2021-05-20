@@ -7,7 +7,7 @@ ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.enviro
 QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'answers', 'image']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answers', 'title', 'message', 'image']
 
 
 
@@ -99,6 +99,11 @@ def question_page(question_id):
         dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", question_id)
         show_answer.append(dict_answers)
         answers.append(dict_answers)
+
+        for question in questions:
+            if question["id"] == question_id:
+                question['answers'] = int(question['answers']) + 1
+        data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
         data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
         return redirect(url_for("question_page", question_id=question_id))
 
