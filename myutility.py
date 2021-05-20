@@ -11,6 +11,12 @@ ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'messag
 QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answers', 'title', 'message', 'image']
 
 
+def submission_to_time(submission_time):
+
+    time = datetime.fromtimestamp(submission_time)
+    return time.strftime("%B %d, %Y")
+
+
 def init_answer_and_question(new_item, length_item, item_type, question_id=0):
     if item_type == "a":
         dict_answers = dict()

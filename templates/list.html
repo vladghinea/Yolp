@@ -54,9 +54,10 @@
 {#    <div class=" container s12 m4 l8">#}
     <div class="container row s12 m4 l8 card-panel hoverable " id="inplansa">
         {% for question in questions %}
-            <div class="mycard">
-                <div class="card-panel hoverable teal lighten-5">
-                <h5><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
+            <div class="mycard" id="{{ question.id }}">
+                <div class="card-panel hoverable teal lighten-5" >
+                    <p class="time" > {{ time(question.submission_time) }}</p>
+                <h5 ><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
                     <hr class="light-grey light2">
                     <p>{{ question.message }}</p>
                     <div class="card-action" >

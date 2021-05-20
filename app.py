@@ -20,6 +20,7 @@ app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 @app.route("/")
 @app.route("/list")
 def list_page():
+    time = myutility.submission_to_time
     questions = data_handler.get_data(QUESTIONS_FILE_PATH)
     if request.args:
         order = request.args['order']
@@ -29,7 +30,7 @@ def list_page():
             if request.args['type'] == 'desc':
                 questions = questions[::-1]
 
-    return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
+    return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER, time=time)
 
 
 
@@ -120,7 +121,9 @@ def question_page(question_id):
                 show_answer.append(answer)
         print(show_question)
 
-        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
+        time = myutility.submission_to_time
+
+        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER, time=time)
 
 
 @app.route("/add-question")
@@ -135,6 +138,7 @@ def add():
     new_dict = myutility.init_answer_and_question(new, old_data, "q")
     old_data.append(new_dict)
     data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
+
     if request.files:
         image = request.files['image']
 
@@ -182,8 +186,10 @@ def delete_answer_page(answer_id):
 @app.route('/add_vote')
 def add_vote_page():
     request_args = request.args
+    print(request_args)
     direction = myutility.add_vote(request_args)
-    return redirect(direction)
+    central = str(int(request_args['name']))
+    return redirect(direction+"#"+central)
 
 
 
