@@ -3,8 +3,8 @@
   add question
 {% endblock %}
 {%  block content %}
-<h3 class="grey-text text-lighten-1">edit question</h3>
-<form action="/question/{{ question_id }}/edit" method="POST" class="col s12">
+<h3 class="grey-text text-lighten-1">edit this question</h3>
+<form action="/question/{{ question_id }}/edit" method="POST" class="col s12" enctype="multipart/form-data">
     <input type="text" name="title" placeholder="Title" value="{{ question.title }}">
     <br>
     <label for="input_question_area">your new question</label>
@@ -14,14 +14,14 @@
     <div class="file-field input-field">
     <div class=" btn-small pink">
         <i class="material-icons right">folder</i> add image
-        <input type="file" name="image">
+        <input type="file" name="image" id="image" >
     </div>
         <div class="file-path-wrapper">
         <input class="file-path validate" type="text">
       </div>
     </div>
 
-    <button class="btn indigo" type="submit" > <span>send</span> <i class="material-icons right">send</i></button>
+    <button class="btn indigo" type="submit" > <span>edit question</span> <i class="material-icons right">send</i></button>
 </form>
 
 {% endblock %}

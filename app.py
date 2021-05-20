@@ -10,8 +10,12 @@ ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'messag
 QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 
 
+
+
 app = Flask(__name__)
 
+app.config['IMAGE_UPLOADS'] = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
+app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
 @app.route("/list")
@@ -21,8 +25,9 @@ def list_page():
         order = request.args['order']
         questions = myutility.sorting(order, questions)
         print(questions)
-    if request.args['type'] == 'desc':
-        questions = questions[::-1]
+        if 'type' in request.args.keys():
+            if request.args['type'] == 'desc':
+                questions = questions[::-1]
 
     return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
 
@@ -57,7 +62,17 @@ def edit_question_page(question_id):
         edit_question = request.form
         new_questions = myutility.edit_question_and_answer(edit_question,questions,'q',question_id)
         data_handler.write_data(QUESTIONS_FILE_PATH, new_questions, QUESTIONS_HEADER)
+        if request.files:
+            image = request.files['image']
+            if image.filename == '':
+                print('image must have a name')
+                return redirect(f'/question/{question_id}')
+            if not myutility.allowed_image_files(image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
+                print("file doesn't have the right extension")
+                return redirect(f'/question/{question_id}')
+            image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         return redirect(f'/question/{question_id}')
+
     elif request.method == 'GET':
         questions= data_handler.get_data(QUESTIONS_FILE_PATH)
         for question in questions:
@@ -82,8 +97,8 @@ def question_page(question_id):
         show_answer.append(dict_answers)
         answers.append(dict_answers)
         data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
-
         return redirect(url_for("question_page", question_id=question_id))
+
     else:
         for question in questions:
             if question['id'] == question_id:
@@ -94,6 +109,7 @@ def question_page(question_id):
         for answer in answers:
             if answer['question_id'] == question_id:
                 show_answer.append(answer)
+        print(show_question)
 
         return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
 
@@ -110,7 +126,17 @@ def add():
     new_dict = myutility.init_answer_and_question(new, old_data, "q")
     old_data.append(new_dict)
     data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
+    if request.files:
+        image = request.files['image']
+        if image.filename == '':
+            print('image must have a name')
+            return redirect(f"/question/{new_dict['id']}")
 
+        if not myutility.allowed_image_files( image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
+            print("file doesn't have the right extension")
+            return redirect(f"/question/{new_dict['id']}")
+
+        image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
     return redirect(f"/question/{new_dict['id']}")
 
 
@@ -120,7 +146,6 @@ def answer_page(question_id):
     for question in questions:
         if question['id'] == question_id:
             show_question = question
-
     return render_template('answer.html', question=show_question)
 
 
@@ -134,6 +159,7 @@ def delete_answer_page(answer_id):
             answers.remove(answer)
     data_handler.write_data(ANSWERS_FILE_PATH,answers,ANSWERS_HEADER)
     return redirect(f'/question/{question_id}')
+
 
 @app.route('/add_vote')
 def add_vote_page():

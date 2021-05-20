@@ -47,6 +47,8 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
             if question['id'] == id:
                 question['title'] = new_item['title']
                 question['message'] = new_item['message']
+                if 'image' in new_item.keys():
+                    question['image'] = new_item['image']
         return length_item
     elif item_type == 'a':
         pass
@@ -94,6 +96,16 @@ def add_vote(request_args):
                     answer['vote_number'] = str(int(answer['vote_number']) - 1)
         data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
         return f"/question/{request_args['id']}"
+
+def allowed_image_files(filename, allowed_extensions):
+    if not '.' in filename:
+        return False
+    ext = filename.rsplit('.',1)[1]
+    if ext.upper() in allowed_extensions:
+        return True
+    else:
+        return False
+
 
 
 
