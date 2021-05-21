@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
@@ -107,7 +107,7 @@ def question_page(question_id):
         answers.append(dict_answers)
         if request.files:
             image = request.files['image']
-            if "image" in image:
+            if image:
                 show_answer[-1]['image'] = image.filename
                 answers[-1]['image'] = image.filename
 

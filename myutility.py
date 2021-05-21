@@ -40,10 +40,7 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_question['vote_number'] = "0"
         dict_question['answers'] = "0"
         for k, v in new_item.items():
-            if k == 'title':
-                dict_question[k] = v.capitalize()
-            else:
-                dict_question[k] = v
+            dict_question[k] = v.capitalize()
         return  dict_question
     else:
         pass
@@ -62,23 +59,41 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
 
 
 def sorting(order, questions):
-    if order == 'title':
-        ordered_questions = sorted(questions,key=itemgetter('title'))
-        return ordered_questions
-    elif order == 'message':
+    # orders = {
+    #     "title": "title",
+    #     "message": "answers",
+    #     "submission_time": "submission_time",
+    #     "view_number": "view_number",
+    #     "vote_number": "vote_number"
+    # }
+    #
+    # if order in orders.keys():
+    #     return sorted(questions, key=orders[order])
+    #
+    # return questions
+
+    if order =='message':
         ordered_questions = sorted(questions, key=itemgetter('answers'))
-        return ordered_questions
-    elif order == "submission_time":
-        ordered_questions = sorted(questions, key=itemgetter('submission_time'))
-        return ordered_questions
-    elif order == 'view_number':
-        ordered_questions = sorted(questions, key=itemgetter('view_number'))
-        return ordered_questions
-    elif order == 'vote_number':
-        ordered_questions = sorted(questions, key=itemgetter('vote_number'))
-        return ordered_questions
     else:
-        return questions
+        ordered_questions = sorted(questions, key=itemgetter(order))
+    return ordered_questions
+    # if order == 'title':
+    #     ordered_questions = sorted(questions,key=itemgetter('title'))
+    #     return ordered_questions
+    # elif order == 'message':
+    #     ordered_questions = sorted(questions, key=itemgetter('answers'))
+    #     return ordered_questions
+    # elif order == "submission_time":
+    #     ordered_questions = sorted(questions, key=itemgetter('submission_time'))
+    #     return ordered_questions
+    # elif order == 'view_number':
+    #     ordered_questions = sorted(questions, key=itemgetter('view_number'))
+    #     return ordered_questions
+    # elif order == 'vote_number':
+    #     ordered_questions = sorted(questions, key=itemgetter('vote_number'))
+    #     return ordered_questions
+    # else:
+    #     return questions
 
 
 
