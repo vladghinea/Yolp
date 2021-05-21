@@ -3,14 +3,14 @@
   question
 {% endblock %}
 {%  block content %}
-    <div class="s1 m6 l6 align-center p4" >
+    <div class="s12 m4 l2 align-center p4" >
      <p class="time" > {{ time(question.submission_time) }}</p>
         <h4 class="center-align p25 ">{{ question.title}}</h4>
         <br />
     </div>
 
     <div>
-        <h5> {{ question.message }}</h5>
+        <p class="mybody-text"> {{ question.message }}</p>
     </div>
     <div>
     <p>views: {{ question.view_number }}</p>
@@ -26,9 +26,9 @@
     {% for answer in answers  %}
         <div>
             <p>answer: <span class="time" > {{ time(answer.submission_time) }}</span></p>
-            <h5>
+            <p class="mybody-text">
                 {{ answer.message }}
-            </h5>
+            </p>
             {%  if answer.image %}
                 <img src="/static/images/uploads/{{ answer['image'] }}" alt="" height="70px"><br>
             {% endif %}

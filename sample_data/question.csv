@@ -1,6 +1,6 @@
 id,submission_time,view_number,vote_number,answers,title,message,image
-1,1493368154,117,17,7,How to make lists in Python?,"I am totally new to this, any hints?",All-List-Methods-And-Functions-In-Python-1.png
-2,1493068124,43,17,1,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
+1,1493368154,124,17,7,How to make lists in Python?,"I am totally new to this, any hints?",All-List-Methods-And-Functions-In-Python-1.png
+2,1493068124,63,17,1,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();
 
 I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
 
@@ -9,17 +9,17 @@ BUT in my theme i also using jquery via webpack so the loading order is now foll
 jquery
 booklet
 app.js (bundled file with webpack, including jquery)",jquery.jpg
-3,1493015432,1378,59,1,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
+3,1493015432,1379,59,1,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
 
 This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",iwillfindyou.jpg
-4,1621335802,29,22,1,Go go Rapidule,"da ma, da! sa calificat Rapidul in A",stema-rapid.jpg
-5,1621429210,39,17,0,Anyone do Halloween at Bran castle?,the castle of vampires,vampir.png
-6,1621445879,10,6,0,O intrebare fara imagine,"nu avem imagine
+4,1621335802,30,22,1,Go go Rapidule,"da ma, da! sa calificat Rapidul in A",stema-rapid.jpg
+5,1621429210,40,17,0,Anyone do Halloween at Bran castle?,the castle of vampires,vampir.png
+6,1621445879,11,6,0,O intrebare fara imagine,"nu avem imagine
 o sa adaug o imagine eu, acum",menu.jpg
-7,1621451037,39,7,0,why batman look's so constipated,I wonder?,the-batman-set-photo.jpg
+7,1621451037,40,7,0,why batman look's so constipated,I wonder?,the-batman-set-photo.jpg
 8,1621493477,40,4,2,"There is someone here that can tell me, what breed is this dog?",I fell in love with his face,look.jpg
 9,1621534517,3,0,2,Can dogs see colors?,I mean do they see only black and white or shades of grey...,puppies.jpg
 10,1621535957,6,0,2,Can i give chocolate to my dog?,"I am an chocoholic, and my dog always see me eat and he craves for it ",what-colors-can-dogs-see.jpg
 11,1621536586,3,0,0,Do dogs eat grass?,"I found my dog eating grass, and I am worried",Why-do-dogs-eat-grass-LS-long.jpg
 12,1621544514,2,0,1,Do dogs play tennis?,sometime....  ; ),caine.jpg
-13,1621544762,3,0,1,How do i teach my dog?,I mean to train him to do many things,106186917-back-to-schoool-small-puppy-dog-on-bright-yellow-background-.jpg
+13,1621544762,4,0,1,How do i teach my dog?,I mean to train him to do many things,106186917-back-to-schoool-small-puppy-dog-on-bright-yellow-background-.jpg

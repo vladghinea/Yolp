@@ -31,6 +31,9 @@ def list_page():
         if 'type' in request.args.keys():
             if request.args['type'] == 'desc':
                 questions = questions[::-1]
+    else:
+        questions = questions[::-1]
+            
 
     return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER, time=time)
 
