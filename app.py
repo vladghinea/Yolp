@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
-app.config['IMAGE_UPLOADS'] = vlad
+app.config['IMAGE_UPLOADS'] = lamine
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
