@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+  add question
+{% endblock %}
+{%  block content %}
+<h3 class="grey-text text-lighten-1">new question</h3>
+<form action="/add" method="POST" class="col s12" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Title">
+    <br>
+    <label for="input_question_area">your new question</label>
+    <br>
+    <textarea name="message" id="input_question_area" cols="60" rows="70" placeholder="message"></textarea>
+    <br>
+    <div class="file-field input-field">
+    <div class=" btn-small pink">
+        <i class="material-icons right">folder</i> add image
+        <input type="file" name="image" id="image" formenctype="multipart/form-data">
+    </div>
+        <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+
+    <button class="btn indigo" type="submit" > <span>create question</span> <i class="material-icons right">send</i>
+</form>
+
+{% endblock %}

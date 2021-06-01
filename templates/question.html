@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}
+  question
+{% endblock %}
+{%  block content %}
+    <div class="s12 m4 l2 align-center p4" >
+     <p class="time" > {{ time(question.submission_time) }}</p>
+        <h4 class="center-align p25 ">{{ question.title}}</h4>
+        <br />
+    </div>
+
+    <div>
+        <p class="mybody-text"> {{ question.message }}</p>
+    </div>
+    <div>
+    <p>views: {{ question.view_number }}</p>
+
+{#    {% if question.image %}#}
+    <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="330px">
+{#    {% endif %}#}
+    </div>
+    <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
+    <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
+    <br><hr>
+
+    {% for answer in answers  %}
+        <div>
+            <p>answer: <span class="time" > {{ time(answer.submission_time) }}</span></p>
+            <p class="mybody-text">
+                {{ answer.message }}
+            </p>
+            {%  if answer.image %}
+                <img src="/static/images/uploads/{{ answer['image'] }}" alt="" height="70px"><br>
+            {% endif %}
+
+             <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/answer/{{ answer.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
+{#             <button class="btn white lighten-4 waves-effect waves-light z-depth-2" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'" style="margin-left: 20vh"> <span class="green-text text-lighten-1" style="font-weight: bold">vote: {{ answer.vote_number }}</span></button>#}
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+        </div>
+    {% endfor %}
+
+    <a href="/question/{{ question.id }}/new-answer" class="btn-floating blue pulse"> add</a>
+
+{% endblock %}
