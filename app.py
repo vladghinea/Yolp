@@ -209,5 +209,3 @@ def add_vote_page():
 if __name__ == "__main__":
     app.config["UPLOAD_FOLDER"] = "/static/images"
     app.run()
-
->>>>>>> e43928c037e62bac0b2a87be81f8b65d3b81d919
