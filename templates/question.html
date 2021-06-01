@@ -4,7 +4,7 @@
 {% endblock %}
 {%  block content %}
     <div class="s12 m4 l2 align-center p4" >
-     <p class="time" > {{ time(question.submission_time) }}</p>
+     <p class="time" > {{ question.submission_time }}</p>
         <h4 class="center-align p25 ">{{ question.title}}</h4>
         <br />
     </div>
@@ -25,7 +25,7 @@
 
     {% for answer in answers  %}
         <div>
-            <p>answer: <span class="time" > {{ time(answer.submission_time) }}</span></p>
+            <p>answer: <span class="time" > {{ answer.submission_time }}</span></p>
             <p class="mybody-text">
                 {{ answer.message }}
             </p>

@@ -2,12 +2,13 @@ from flask import Flask, render_template, redirect, request, url_for
 import os
 import data_handler
 import myutility
+import data_manager
 
 ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'answers', 'title', 'message', 'image']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 
 
 
@@ -16,14 +17,13 @@ app = Flask(__name__)
 
 vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
 @app.route("/list")
-def list_page():
-    time = myutility.submission_to_time
-    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
+def list_page():                                                #REFACUT
+    questions = data_manager.get_questions()
     if request.args:
         order = request.args['order']
         questions = myutility.sorting(order, questions)
@@ -35,14 +35,14 @@ def list_page():
         questions = questions[::-1]
             
 
-    return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER, time=time)
+    return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
 
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
-    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
-    answers = data_handler.get_data(ANSWERS_FILE_PATH)
+    questions = data_manager.get_questions()
+    answers = data_manager.get_answers()
     new_answers=[]
     for question in questions:
         if question['id'] == question_id:
@@ -89,54 +89,47 @@ def edit_question_page(question_id):
                 return render_template('edit_question.html', question=question, question_id=question_id )
 
 
-@app.route("/question/<question_id>", methods=['GET', 'POST'])
+@app.route("/question/<question_id>", methods=['GET', 'POST'])   # REFACUT
 def question_page(question_id):
-    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
-    answers = data_handler.get_data(ANSWERS_FILE_PATH)
-
+    question_id = int(question_id)
+    questions = data_manager.get_questions()
+    answers = data_manager.get_answers()
     show_question = {}
     show_answer = []
     if request.method == "POST":
+        print("postul asta")
         for answer in answers:
+            print(answer)
             if answer['question_id'] == question_id:
                 show_answer.append(answer)
-
         new_answer = request.form
-        dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", question_id)
-        show_answer.append(dict_answers)
-        answers.append(dict_answers)
+        image_filename = ""
         if request.files:
             image = request.files['image']
             if image:
                 show_answer[-1]['image'] = image.filename
                 answers[-1]['image'] = image.filename
-
+                image_filename = image.filename
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
 
+        dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", image_filename, question_id)
+        print(dict_answers)
+        data_manager.add_answer(dict_answers)
 
-        for question in questions:
-            if question["id"] == question_id:
-                question['answers'] = int(question['answers']) + 1
-        data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
-        data_handler.write_data(ANSWERS_FILE_PATH, answers, ANSWERS_HEADER)
         return redirect(url_for("question_page", question_id=question_id))
 
     else:
+        print('get')
         for question in questions:
             if question['id'] == question_id:
-                question['view_number'] = str(int(question["view_number"]) + 1)
-
-                data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
+                new_views = str(int(question["view_number"]) + 1)
+                data_manager.update_question_views(question_id,int(new_views))
+                question['view_number'] = new_views
                 show_question = question
-
         for answer in answers:
             if answer['question_id'] == question_id:
                 show_answer.append(answer)
-        print(show_question)
-
-        time = myutility.submission_to_time
-
-        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER, time=time)
+        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
 
 
 @app.route("/add-question")
@@ -171,7 +164,8 @@ def add():
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def answer_page(question_id):
-    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
+    question_id = int(question_id)
+    questions = data_manager.get_questions()
     for question in questions:
         if question['id'] == question_id:
             show_question = question

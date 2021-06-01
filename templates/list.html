@@ -56,7 +56,7 @@
         {% for question in questions %}
             <div class="mycard" id="{{ question.id }}">
                 <div class="card-panel hoverable teal lighten-5" >
-                    <p class="time" > {{ time(question.submission_time) }}</p>
+                    <p class="time" > {{ question.submission_time }}</p>
                 <h5 ><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
                     <hr class="light-grey light2">
                     <div class="s12 m2 l2 row ">

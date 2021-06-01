@@ -17,17 +17,18 @@ def submission_to_time(submission_time):
     return time.strftime("%B %d, %Y")
 
 
-def init_answer_and_question(new_item, length_item, item_type, question_id=0):
+def init_answer_and_question(new_item, length_item, item_type, image_filename, question_id=0):
     if item_type == "a":
         dict_answers = dict()
         dict_answers['id'] = str(len(length_item) + 1)
         time = datetime.now()
-        submission_time = int(datetime.timestamp(time))
-        dict_answers['submission_time'] = str(submission_time)
+        # dict_answers['submission_time'] = time
+        dict_answers['submission_time'] = time.strftime("%Y-%m-%d %H:%M:%S")
         dict_answers['vote_number'] = "0"
         dict_answers['question_id'] = question_id
         for k, v in new_item.items():
             dict_answers[k] = v
+        dict_answers['image'] = image_filename
         return dict_answers
 
     elif item_type == "q":
@@ -41,6 +42,7 @@ def init_answer_and_question(new_item, length_item, item_type, question_id=0):
         dict_question['answers'] = "0"
         for k, v in new_item.items():
             dict_question[k] = v.capitalize()
+        dict_question['image'] = image_filename
         return  dict_question
     else:
         pass
@@ -59,43 +61,11 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
 
 
 def sorting(order, questions):
-    # orders = {
-    #     "title": "title",
-    #     "message": "answers",
-    #     "submission_time": "submission_time",
-    #     "view_number": "view_number",
-    #     "vote_number": "vote_number"
-    # }
-    #
-    # if order in orders.keys():
-    #     return sorted(questions, key=orders[order])
-    #
-    # return questions
-
     if order =='message':
         ordered_questions = sorted(questions, key=itemgetter('answers'))
     else:
         ordered_questions = sorted(questions, key=itemgetter(order))
     return ordered_questions
-    # if order == 'title':
-    #     ordered_questions = sorted(questions,key=itemgetter('title'))
-    #     return ordered_questions
-    # elif order == 'message':
-    #     ordered_questions = sorted(questions, key=itemgetter('answers'))
-    #     return ordered_questions
-    # elif order == "submission_time":
-    #     ordered_questions = sorted(questions, key=itemgetter('submission_time'))
-    #     return ordered_questions
-    # elif order == 'view_number':
-    #     ordered_questions = sorted(questions, key=itemgetter('view_number'))
-    #     return ordered_questions
-    # elif order == 'vote_number':
-    #     ordered_questions = sorted(questions, key=itemgetter('vote_number'))
-    #     return ordered_questions
-    # else:
-    #     return questions
-
-
 
 
 def add_vote(request_args):
