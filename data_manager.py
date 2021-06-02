@@ -136,4 +136,18 @@ def edit_question(cursor,question_id, edit_question, image_file):
         """
     cursor.execute(query)
 
+@database_common.connection_handler
+def add_comment_answer(cursor,answer_id,new_message,time):
+    query = f"""
+        INSERT INTO comment ( answer_id, message, submission_time)
+        VALUES ('{answer_id}','{new_message}','{time}' )
+        """
+    cursor.execute(query)
 
+@database_common.connection_handler
+def add_comment_question(cursor,question_id,new_message,time):
+    query = f"""
+        INSERT INTO comment ( question_id, message, submission_time)
+        VALUES ('{question_id}','{new_message}','{time}' )
+        """
+    cursor.execute(query)

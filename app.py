@@ -1,3 +1,5 @@
+import datetime
+from datetime import datetime
 from flask import Flask, render_template, redirect, request, url_for
 import os
 import data_handler
@@ -188,17 +190,24 @@ def add_vote_page():
     request_args = request.args
     print(request_args)
     direction = myutility.add_vote(request_args)
-    central = str(int(request_args['question_id']))
+    central = str(int(request_args['id']))
     return redirect(direction+"#"+central)
 
 
-@app.route('/question/<question_id>/new-comment')
+@app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def add_question_comment(question_id):
-    pass
+    new_message = request.form['new_comment_q']
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    data_manager.add_comment_question(question_id, new_message, time)
+    return redirect(url_for("question_page", question_id=question_id))
 
-@app.route('/answer/<answer_id>/new-comment')
+@app.route('/answer/<answer_id>/new-comment' , methods=['GET','POST'])
 def add_answer_comment(answer_id):
-    pass
+    new_message = request.form['new_comment_a']
+    question_id = request.args['question_id']
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    data_manager.add_comment_answer(answer_id,new_message,time)
+    return redirect(url_for("question_page", question_id=question_id))
 
 
 

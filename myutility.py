@@ -73,7 +73,7 @@ def add_vote(request_args):
     if request_args['type_vote'] == 'question':
         questions = data_manager.get_questions()
         for question in questions:
-            if question["id"] == int(request_args['question_id']):
+            if question["id"] == int(request_args['id']):
                 if request_args["operation"] == "plus":
                     data_manager.update_question_vote_plus(question)
                 elif request_args["operation"] == "minus":
@@ -83,7 +83,7 @@ def add_vote(request_args):
     elif request_args['type_vote'] == 'answer':
         answers = data_manager.get_answers()
         for answer in answers:
-            if answer['id'] == int(request_args['answer_id']):
+            if answer['id'] == int(request_args['id']):
                 if request_args["operation"] == "plus":
                     print("am intrat aici?")
                     data_manager.update_answer_vote_plus(answer)
