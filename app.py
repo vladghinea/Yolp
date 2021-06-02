@@ -18,7 +18,7 @@ app = Flask(__name__)
 vlad = '/home/vlad/projects/ask-mate-2-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-2-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 @app.route("/")
@@ -43,8 +43,9 @@ def list_page():                                                #REFACUT
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
     question_id = int(question_id)
+    data_manager.delete_answers(question_id)
     data_manager.delete_question(question_id)
-    data_manager.delete_answer(question_id)
+    question = data_manager.get_questions()
     return redirect("/list")
 
 
@@ -55,11 +56,8 @@ def edit_question_page(question_id):
         edit_question = request.form
 
         image_file = ""
-        if request.files:
+        if request.files["image"].filename != "":
             image = request.files['image']
-            if image.filename == '':
-                print('image must have a name')
-                return redirect(f'/question/{question_id}')
             if not myutility.allowed_image_files(image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
                 print("file doesn't have the right extension")
                 return redirect(f'/question/{question_id}')
@@ -76,25 +74,25 @@ def edit_question_page(question_id):
                 return render_template('edit_question.html', question=question, question_id=question_id )
 
 
-@app.route("/question/<question_id>", methods=['GET', 'POST'])   # REFACUT
+@app.route("/question/<question_id>", methods=['GET', 'POST'])
 def question_page(question_id):
     question_id = int(question_id)
+    comments = data_manager.get_comment()
     questions = data_manager.get_questions()
     answers = data_manager.get_answers()
+    show_comments_questions = []
+    show_comments_answers = []
     show_question = {}
     show_answer = []
     if request.method == "POST":
-
         for answer in answers:
-
             if answer['question_id'] == question_id:
                 show_answer.append(answer)
         new_answer = request.form
         image_filename = ""
-        if request.files:
+        if request.files["image"].filename != "":
             image = request.files['image']
             if image:
-
                 image_filename = image.filename
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
 
@@ -113,8 +111,16 @@ def question_page(question_id):
                 show_question = question
         for answer in answers:
             if answer['question_id'] == question_id:
+                for comment in comments:
+                    if answer['id'] == comment['answer_id']:
+                        show_comments_answers.append(comment)
                 show_answer.append(answer)
-        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER)
+        for comment in comments:
+            if comment['question_id'] == question_id:
+                show_comments_questions.append(comment)
+
+
+        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER, comments_question=show_comments_questions, comments_answers=show_comments_answers)
 
 
 @app.route("/add-question")
@@ -126,19 +132,17 @@ def add_question_page():
 def add():
     image_filename = ""
     old_data = data_manager.get_questions()
+    print(old_data)
     new = request.form
+    print(new)
+    # new_id = int(old_data[-1]['id']) +1
     new_dict = myutility.init_answer_and_question(new, old_data, "q", image_filename)
     print(f"reqest.file: {request.files}")
     image_frame=0
 
     # if request.files:
-    if 'file' in request.files:
+    if request.files["image"].filename != "":
         image = request.files['image']
-
-
-        if image.filename == '':
-            print('image must have a name')
-            return redirect(f"/question/{new_dict['id']}")
 
         if not myutility.allowed_image_files( image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
             print("file doesn't have the right extension")
@@ -151,7 +155,9 @@ def add():
     print(new_dict)
     print(f"{old_data[-1]['id']}")
     data_manager.add_question(new_dict)
-    return redirect(f"/question/{new_dict['id']}")
+    questions = data_manager.get_questions()
+    print(questions[-1])
+    return redirect(f"/question/{questions[-1]['id']}")
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
@@ -166,19 +172,14 @@ def answer_page(question_id):
 
 @app.route('/answer/<answer_id>/delete')
 def delete_answer_page(answer_id):
-    questions = data_handler.get_data(QUESTIONS_FILE_PATH)
+    answer_id= int(answer_id)
     question_id = 0
-    answers = data_handler.get_data(ANSWERS_FILE_PATH)
+    answers = data_manager.get_answers()
     for answer in answers:
         if answer['id'] == answer_id:
             question_id = answer["question_id"]
-            for question in questions:
-                if question["id"] == answer['question_id']:
-                    question['answers'] = int(question['answers']) - 1
-            data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
-            answers.remove(answer)
+            data_manager.delete_answer(answer_id)
 
-    data_handler.write_data(ANSWERS_FILE_PATH,answers,ANSWERS_HEADER)
     return redirect(f'/question/{question_id}')
 
 
@@ -187,8 +188,17 @@ def add_vote_page():
     request_args = request.args
     print(request_args)
     direction = myutility.add_vote(request_args)
-    central = str(int(request_args['name']))
+    central = str(int(request_args['question_id']))
     return redirect(direction+"#"+central)
+
+
+@app.route('/question/<question_id>/new-comment')
+def add_question_comment(question_id):
+    pass
+
+@app.route('/answer/<answer_id>/new-comment')
+def add_answer_comment(answer_id):
+    pass
 
 
 

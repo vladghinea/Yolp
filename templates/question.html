@@ -21,8 +21,13 @@
     </div>
     <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
     <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
-    <br><hr>
-
+    <br>
+    <div class="comment">
+    {% for comment in comments_question %}
+    {{ comment.message }}
+    {% endfor %}
+    </div><br>
+    <hr>
     {% for answer in answers  %}
         <div>
             <p>answer: <span class="time" > {{ answer.submission_time }}</span></p>
@@ -35,8 +40,15 @@
 
              <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/answer/{{ answer.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
 {#             <button class="btn white lighten-4 waves-effect waves-light z-depth-2" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'" style="margin-left: 20vh"> <span class="green-text text-lighten-1" style="font-weight: bold">vote: {{ answer.vote_number }}</span></button>#}
-             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
-             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?answer_id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?answer_id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+        </div><br>
+        <div class="comment">
+        {% for comment in comments_answers %}
+            {% if comment.answer_id == answer.id %}
+                {{ comment.message }}
+            {% endif %}
+        {% endfor %}
         </div>
     {% endfor %}
 

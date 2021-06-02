@@ -1,31 +1,4 @@
 id,submission_time,vote_number,question_id,message,image
-1,1493398154,8,1,You need to use brackets: my_list = [],
-2,1493088154,28,1,Look it up in the Python docs,
-3,1621335822,45,1,"interesting plugin
-did you write it",
-4,1621335824,4,1,jquery booklet it's a must,
-5,1621335855,5,1,jquery booklet it's a must,
-6,1621335876,13,2,Good luck,
-7,1593088154,6,2,alt raspuns,
-8,1621335895,0,3,pai acum 3,
-9,1621429223,0,4,avem imaginea?,
-10,1621445904,0,5,oare puneti o imagine?,
-11,1621493920,0,7,pentru ca-l doare,
-12,1621526230,0,8,asdasdas,pngaaa.com-2915711.png
-13,1621534783,0,9,Dogs only discern blue and yellow ,
-14,1621534907,0,9,"Dogs have only two types of cones, this limited color perception is called dichromatic vision",
-15,1621535997,0,10,that's a no no,
-16,1621536047,0,10,Chocolate is poisonous to dogs,
-17,1621536260,0,10,dogs are unable to metabolize the theobromine from it,
-18,1621537796,3,8,imho i do think is german shepherd puppy,
-19,1621544572,0,12,he is so cute,
-20,1621544900,0,13,that's really awesome,
-21,1621585769,0,13,dasdas,
-22,1621585871,0,13,dasdasd,1-caine-musca.jpg
-23,1621585881,0,13,sdas,
-24,1621585894,0,13,dasdasda,
-25,1621585901,0,12,dasdas,
-26,1621592685,0,10,aaa,
-27,1621592711,0,10,asdasdas,1-caine-musca.jpg
-28,1621593932,0,9,sdas,1-caine-musca.jpg
-29,1622214238,0,12,super,awesome-jquery.png
+1,2017-04-28 16:49:00,4,0,You need to use brackets: my_list = [],
+2,2017-04-25 14:42:00,35,0,Look it up in the Python docs,images/image2.jpg
+3,2021-06-02 14:01:31,1,4,raspuns,

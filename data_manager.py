@@ -16,6 +16,15 @@ def get_questions(cursor):
     return cursor.fetchall()
 
 @database_common.connection_handler
+def get_comment(cursor):
+    query = """
+        SELECT *
+        FROM comment
+        ORDER BY id"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+@database_common.connection_handler
 def get_answers(cursor):
     query = """
         SELECT *
@@ -32,6 +41,48 @@ def update_question_views(cursor,question_id,new_views):
         WHERE id = '{question_id}'
         """
     cursor.execute(query)
+
+@database_common.connection_handler
+def update_question_vote_plus(cursor,question):
+    vote = int(question['vote_number']) + 1
+    query = f"""
+        UPDATE question
+        SET vote_number = '{vote}'
+        WHERE id = '{question['id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_question_vote_minus(cursor,question):
+    vote = int(question['vote_number']) - 1
+    query = f"""
+        UPDATE question
+        SET vote_number = '{vote}'
+        WHERE id = '{question['id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_answer_vote_plus(cursor,answer):
+    vote = int(answer['vote_number']) + 1
+    query = f"""
+        UPDATE answer
+        SET vote_number = '{vote}'
+        WHERE id = '{answer['id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_answer_vote_minus(cursor,answer):
+    vote = int(answer['vote_number']) - 1
+    query = f"""
+        UPDATE answer
+        SET vote_number = '{vote}'
+        WHERE id = '{answer['id']}'
+        """
+    cursor.execute(query)
+
+
 
 @database_common.connection_handler
 def add_answer(cursor,new_answer):
@@ -59,14 +110,22 @@ def delete_question(cursor,question_id):
     cursor.execute(query)
 
 @database_common.connection_handler
-def delete_answer(cursor,question_id):
+def delete_answer(cursor,answer_id):
+    query = f"""
+        DELETE
+        FROM answer
+        WHERE id = '{answer_id}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def delete_answers(cursor,question_id):
     query = f"""
         DELETE
         FROM answer
         WHERE question_id = '{question_id}'
         """
     cursor.execute(query)
-
 
 @database_common.connection_handler
 def edit_question(cursor,question_id, edit_question, image_file):
@@ -76,3 +135,5 @@ def edit_question(cursor,question_id, edit_question, image_file):
         WHERE id = '{question_id}'
         """
     cursor.execute(query)
+
+

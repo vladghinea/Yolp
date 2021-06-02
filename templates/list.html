@@ -77,8 +77,8 @@
                     <div class="card-action"  >
                         <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
                     <button class="btn-floating white waves-effect waves-light"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="margin-left: 10px">{{ question.view_number }}</span>
-                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=plus'" style="position: static; margin-left: 67%; "> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: static; padding-top: 10px;padding-left: 5px">{{ question.vote_number }}</span>
-                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?name={{ question.id }}&type_vote=question&operation=minus'" style="position: static; margin-left: 1%; "> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?question_id={{ question.id }}&type_vote=question&operation=plus'" style="position: static; margin-left: 67%; "> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: static; padding-top: 10px;padding-left: 5px">{{ question.vote_number }}</span>
+                        <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?question_id={{ question.id }}&type_vote=question&operation=minus'" style="position: static; margin-left: 1%; "> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
 
                     </div>
                 </div>
