@@ -62,9 +62,11 @@
                     <div class="s12 m2 l2 row ">
 
                         <div class="col left">
+                            {% if question.image %}
                             <div class="card" style="padding: 5px;">
                     <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="70px" style=" margin-top: 5px; padding: 0";>
                                 </div>
+                            {% endif %}
                             </div>
                             <div class="col  container" style=" height: 130px; margin: 0 0 0 0; padding: 2% 0 0 0;  text-align: left; text-justify: inter-word ;display: flex; flex-direction: column; justify-content: center;">
 

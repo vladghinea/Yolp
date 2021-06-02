@@ -15,7 +15,7 @@ QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'titl
 
 app = Flask(__name__)
 
-vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
+vlad = '/home/vlad/projects/ask-mate-2-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-2-python-vladghinea/static/images/uploads'
 app.config['IMAGE_UPLOADS'] = lamine
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
@@ -128,10 +128,12 @@ def add():
     new = request.form
     new_dict = myutility.init_answer_and_question(new, old_data, "q", image_filename)
     print(f"reqest.file: {request.files}")
+    image_frame=0
 
-
-    if request.files:
+    # if request.files:
+    if 'file' in request.files:
         image = request.files['image']
+
 
         if image.filename == '':
             print('image must have a name')
@@ -141,8 +143,7 @@ def add():
             print("file doesn't have the right extension")
             return redirect(f"/question/{new_dict['id']}")
 
-
-
+        image_frame = 1
         image_filename = image.filename
         image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         new_dict['image'] = image_filename
