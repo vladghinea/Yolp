@@ -28,13 +28,13 @@
             <form method="post" action="/question/{{question.id}}/new-comment">
             <label for="new_comment_q"> Comments</label>
             <input name="new_comment_q" placeholder="Enter your comments" type="text" id="new_comment_q">
-            <button type="submit">add</button>
+            <button type="submit"class="waves-effect waves-light btn-small"><i class="material-icons">email</i></button>
             </form>
-             <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="30px" style=" float: left; padding-right: 50px;">
+
             {% for comment in comments_question %}
-                {% if comment %}
+                {% if comment.message != "" %}
                 <div class="comment_q">
-                 <span style=" margin-top: 20px">{{ comment.message }}</span>
+                 <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;"><span style=" margin: 20px 0">{{ comment.message }}</span>
                 </div>
                 {% endif %}
             {% endfor %}
@@ -59,13 +59,16 @@
             <form method="post" action="/answer/{{answer.id}}/new-comment?question_id={{ answer.question_id }}">
             <label for="new_comment_a"> Comments</label>
             <input name="new_comment_a" placeholder="Enter your comments" type="text" id="new_comment_a">
-            <button type="submit">add</button>
+            <button type="submit" class="waves-effect waves-light btn-small"><i class="material-icons">email</i></button>
             </form>
             {% for comment in comments_answers %}
+
                 {% if comment.answer_id == answer.id %}
+                    {% if comment.message != "" %}
                     <div class="comment_a">
-                        <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="25px" style=" float: left; padding-left: 15px; padding-bottom: 2.5px"">{{ comment.message }}
+                         <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;"><span style=" margin: 20px 0">{{ comment.message }}
                     </div>
+                        {% endif %}
                  {% endif %}
             {% endfor %}
 

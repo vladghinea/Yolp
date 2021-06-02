@@ -49,28 +49,28 @@ a {
 }
 
 .comment_q{
-    /*background-color: #e0dfdf;*/
-
+    background-color: #e0dfdf;
+    position: relative;
     color: #629997;
     font-size: 12px;
     padding: 6px;
-    margin-top: 0;
-    border-radius: 0 0 20px 20px;
+    margin-top: 10px;
+    border-radius: 20px 20px;
     margin-bottom: 5px;
     /*border-color: darkturquoise;*/
     /*border-width: 0px 2px 2px 2px;*/
     /*border-style: solid;*/
 }
 .comment_a{
-
+    position: relative;
     background-color: #e0dfdf;
     color: #629997;
     font-size: 12px;
     padding: 6px;
-    margin-top: 20px;
-    border-radius: 0 0 20px 20px;
-    margin-bottom: -20px;
-    width: 100%;
+
+    border-radius: 20px 20px;
+    margin: 5px 20px;
+
 
 }
 
@@ -93,3 +93,8 @@ a {
     padding: 10px;
     margin-bottom: 0;
 }
+
+button {
+   margin-bottom: 10px;
+}
+
