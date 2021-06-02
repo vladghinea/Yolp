@@ -16,8 +16,8 @@ QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'titl
 app = Flask(__name__)
 
 vlad = '/home/vlad/projects/ask-mate-1-python-keitkalon/static/images/uploads/'
-lamine = '/home/keitkalon/projects/web/ask-mate-1-python-keitkalon/static/images/uploads'
-app.config['IMAGE_UPLOADS'] = vlad
+lamine = '/home/keitkalon/projects/web/ask-mate-2-python-vladghinea/static/images/uploads'
+app.config['IMAGE_UPLOADS'] = lamine
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG']
 
 @app.route("/")
@@ -41,33 +41,19 @@ def list_page():                                                #REFACUT
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
-    questions = data_manager.get_questions()
-    answers = data_manager.get_answers()
-    new_answers=[]
-    for question in questions:
-        if question['id'] == question_id:
-            for answer in answers:
-                if answer['question_id'] != question_id:
-                    new_answers.append(answer)
-                    print("intru in answers si stergem pe aia de jos")
-
-            for answer in new_answers:
-                if answer['question_id'] > question_id:
-                    answer['question_id'] = int(answer['question_id']) - 1
-                    print('intru in answers si modificam q_id-ul')
-            questions.remove(question)
-    data_handler.write_data(QUESTIONS_FILE_PATH, questions, QUESTIONS_HEADER)
-    data_handler.write_data(ANSWERS_FILE_PATH, new_answers, ANSWERS_HEADER)
+    question_id = int(question_id)
+    data_manager.delete_question(question_id)
+    data_manager.delete_answer(question_id)
     return redirect("/list")
 
 
 @app.route('/question/<question_id>/edit', methods=['GET','POST'])
 def edit_question_page(question_id):
+    question_id = int(question_id)
     if request.method == 'POST':
-        questions= data_handler.get_data(QUESTIONS_FILE_PATH)
         edit_question = request.form
-        new_questions = myutility.edit_question_and_answer(edit_question,questions,'q',question_id)
-        data_handler.write_data(QUESTIONS_FILE_PATH, new_questions, QUESTIONS_HEADER)
+
+        image_file = ""
         if request.files:
             image = request.files['image']
             if image.filename == '':
@@ -76,14 +62,14 @@ def edit_question_page(question_id):
             if not myutility.allowed_image_files(image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
                 print("file doesn't have the right extension")
                 return redirect(f'/question/{question_id}')
-
-            new_questions[int(question_id)-1]['image']= image.filename
-            data_handler.write_data(QUESTIONS_FILE_PATH, new_questions, QUESTIONS_HEADER)
+            image_file = image.filename
             image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
+        data_manager.edit_question(question_id, edit_question, image_file)
+
         return redirect(f'/question/{question_id}')
 
     elif request.method == 'GET':
-        questions= data_handler.get_data(QUESTIONS_FILE_PATH)
+        questions= data_manager.get_questions()
         for question in questions:
             if question['id'] == question_id:
                 return render_template('edit_question.html', question=question, question_id=question_id )
@@ -97,9 +83,9 @@ def question_page(question_id):
     show_question = {}
     show_answer = []
     if request.method == "POST":
-        print("postul asta")
+
         for answer in answers:
-            print(answer)
+
             if answer['question_id'] == question_id:
                 show_answer.append(answer)
         new_answer = request.form
@@ -107,19 +93,17 @@ def question_page(question_id):
         if request.files:
             image = request.files['image']
             if image:
-                show_answer[-1]['image'] = image.filename
-                answers[-1]['image'] = image.filename
+
                 image_filename = image.filename
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
 
         dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", image_filename, question_id)
-        print(dict_answers)
+
         data_manager.add_answer(dict_answers)
 
         return redirect(url_for("question_page", question_id=question_id))
 
     else:
-        print('get')
         for question in questions:
             if question['id'] == question_id:
                 new_views = str(int(question["view_number"]) + 1)
@@ -139,11 +123,12 @@ def add_question_page():
 
 @app.route("/add", methods=['POST'])
 def add():
-    old_data = data_handler.get_data(QUESTIONS_FILE_PATH)
+    image_filename = ""
+    old_data = data_manager.get_questions()
     new = request.form
-    new_dict = myutility.init_answer_and_question(new, old_data, "q")
-    old_data.append(new_dict)
-    data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
+    new_dict = myutility.init_answer_and_question(new, old_data, "q", image_filename)
+    print(f"reqest.file: {request.files}")
+
 
     if request.files:
         image = request.files['image']
@@ -156,9 +141,14 @@ def add():
             print("file doesn't have the right extension")
             return redirect(f"/question/{new_dict['id']}")
 
-        old_data[-1]['image'] = image.filename
-        data_handler.write_data(QUESTIONS_FILE_PATH, old_data, QUESTIONS_HEADER)
+
+
+        image_filename = image.filename
         image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
+        new_dict['image'] = image_filename
+    print(new_dict)
+    print(f"{old_data[-1]['id']}")
+    data_manager.add_question(new_dict)
     return redirect(f"/question/{new_dict['id']}")
 
 
