@@ -69,8 +69,8 @@
                     <p class="time" >
                         {{ question.submission_time }}</p>
                 <h5 ><a href="/question/{{question['id']}}">
-                    {% if word in question.title %}
-                         {{ question.title.replace(word, '<span style="background-color: yellow;">{}</span>'.format(word))}}
+                    {% if word in question.title.lower() %}
+                         {{ question.title.lower()|replace(word, '<span style="background-color: #a0e0dc;">{}</span>'.format(word))|safe}}
                     {% else %}
                         {{ question.title }}
                     {% endif %}
@@ -87,7 +87,13 @@
                             </div>
                             <div class="col  container" style=" height: 130px; margin: 0 0 0 0; padding: 2% 0 0 0;  text-align: left; text-justify: inter-word ;display: flex; flex-direction: column; justify-content: center;">
 
-                    <span class=" " style=" height: 70px; margin: 0; padding: 0; overflow: hidden !important; text-align: left; text-overflow: ellipsis; white-space: nowrap ">{{ question.message }}</span>
+                    <span class=" " style=" height: 70px; margin: 0; padding: 0; overflow: hidden !important; text-align: left; text-overflow: ellipsis; white-space: nowrap ">
+                        {% if word in question.message %}
+                         {{ question.message.replace(word, '<span style="background-color: #a0e0dc;">{}</span>'.format(word))|safe}}
+                    {% else %}
+                        {{ question.message }}
+                        {% endif %}
+                    </span>
 
                             </div>
                     </div>
@@ -102,7 +108,11 @@
                         {% for answer in answers %}
                             {% if answer.question_id == question.id %}
                                 <div style="background-color: aliceblue;color: #629997">
-                                {{ answer.message }}
+                                {% if word in answer.message %}
+                         {{ answer.message.replace(word, '<span style="background-color: #a0e0dc;">{}</span>'.format(word))|safe}}
+                    {% else %}
+                        {{ answer.message }}
+                        {% endif %}
                                 </div>
                             {% endif %}
                             {% endfor %}
