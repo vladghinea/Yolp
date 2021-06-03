@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+ yolp-edit.comment
+{% endblock %}
+{%  block content %}
+<h3 class="grey-text text-lighten-1">edit this comment</h3>
+<form action="/comment/{{ comment_id }}/edit?question_id={{ comment.question_id }}&answer_id={{ comment.answer_id }}" method="POST" class="col s12" enctype="multipart/form-data" >
+    <br>
+    <input name="message" id="input_comment_area" placeholder="message" value="{{ comment.message }}" maxlength="25">
+    <br>
+
+
+    <button class="btn indigo" type="submit" > <span>edit comment</span> <i class="material-icons right">send</i></button>
+</form>
+
+{% endblock %}

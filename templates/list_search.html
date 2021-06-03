@@ -66,8 +66,15 @@
         {% for question in questions %}
             <div class="mycard" id="{{ question.id }}">
                 <div class="card-panel hoverable teal lighten-5" >
-                    <p class="time" > {{ question.submission_time }}</p>
-                <h5 ><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
+                    <p class="time" >
+                        {{ question.submission_time }}</p>
+                <h5 ><a href="/question/{{question['id']}}">
+                    {% if word in question.title %}
+                         {{ question.title.replace(word, '<span style="background-color: yellow;">{}</span>'.format(word))}}
+                    {% else %}
+                        {{ question.title }}
+                    {% endif %}
+                </a></h5>
                     <hr class="light-grey light2">
                     <div class="s12 m2 l2 row ">
 
@@ -91,6 +98,15 @@
                         <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=minus'" style="position: static; margin-left: 1%; "> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
 
                     </div>
+
+                        {% for answer in answers %}
+                            {% if answer.question_id == question.id %}
+                                <div style="background-color: aliceblue;color: #629997">
+                                {{ answer.message }}
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+
                 </div>
             </div>
         {% endfor %}

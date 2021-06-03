@@ -62,10 +62,7 @@ def edit_question_and_answer(new_item, length_item, item_type, id):
 
 
 def sorting(order, questions):
-    if order =='message':
-        ordered_questions = sorted(questions, key=itemgetter('answers'))
-    else:
-        ordered_questions = sorted(questions, key=itemgetter(order))
+    ordered_questions = sorted(questions, key=itemgetter(order))
     return ordered_questions
 
 

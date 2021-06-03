@@ -25,16 +25,33 @@
             <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
             <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
             </div>
+            <div class="tag-container">
+                {% for tag in tags%}
+            <div class="chip">
+                {{ tag.name }}
+                <i onclick="window.location='/question/{{ question.id }}/tag/{{ tag.id }}/delete'" class="close material-icons">close</i>
+              </div>
+                {% endfor %}
+            <a href="/question/{{ question.id }}/new-tag">add tag</a>
+
+            </div>
+            <div>
             <form method="post" action="/question/{{question.id}}/new-comment">
             <label for="new_comment_q">Your Short Comments</label>
             <input name="new_comment_q" placeholder="Enter short comment" type="text" id="new_comment_q" maxlength="25">
             <button type="submit"class="waves-effect waves-light btn-small"><i class="material-icons">email</i></button>
             </form>
-
+            </div>
             {% for comment in comments_question %}
                 {% if comment.message != "" %}
                 <div class="comment_q">
-                 <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;"><span style=" margin: 20px 0">{{ comment.message }}</span><button class="btn-floating gray waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;"><span style="position: relative; bottom: 7px">edit</span></button>
+                 <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">
+                    <span>{{ comment.submission_time }}</span>
+                    <span style=" margin: 20px 0">{{ comment.message }}</span>
+                    <span>Edited {{ comment.edited_count }} times</span>
+                    <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                        <span style="position: relative; bottom: 7px">edit</span>
+                    </button>
                 </div>
                 {% endif %}
             {% endfor %}
@@ -53,6 +70,7 @@
             {% endif %}
 
              <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/answer/{{ answer.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
+            <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/answer/{{ answer.id }}/edit'">edit</button>
 {#             <button class="btn white lighten-4 waves-effect waves-light z-depth-2" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'" style="margin-left: 20vh"> <span class="green-text text-lighten-1" style="font-weight: bold">vote: {{ answer.vote_number }}</span></button>#}
              <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
              <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
@@ -66,7 +84,13 @@
                 {% if comment.answer_id == answer.id %}
                     {% if comment.message != "" %}
                     <div class="comment_a">
-                         <img src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;"><span style=" margin: 20px 0">{{ comment.message }} <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;"><span style="position: relative; bottom: 7px">edit</span></button>
+                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">
+                        <span>{{ comment.submission_time }}</span>
+                        <span style=" margin: 20px 0">{{ comment.message }}</span>
+                        <span>Edited {{ comment.edited_count }} times</span>
+                        <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                            <span style="position: relative; bottom: 7px">edit</span>
+                        </button>
                     </div>
                         {% endif %}
                  {% endif %}

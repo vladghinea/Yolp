@@ -9,47 +9,129 @@ import data_manager
 ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
-ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-
-
-
 
 app = Flask(__name__)
 
 vlad = '/home/vlad/projects/ask-mate-2-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-2-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 @app.route("/")
 @app.route("/list")
-def list_page():                                                #REFACUT
+def list_page():
+    data_manager.count_no_null()
     questions = data_manager.get_questions()
-    if request.args:
-        order = request.args['order']
-        questions = myutility.sorting(order, questions)
-        print(questions)
-        if 'type' in request.args.keys():
-            if request.args['type'] == 'desc':
-                questions = questions[::-1]
+    if request.path == '/':
+        if request.args:
+            order = request.args['order']
+            questions = myutility.sorting(order, questions)
+            if 'type' in request.args.keys():
+                if request.args['type'] == 'desc':
+                    questions = questions[::-1]
+        else:
+            questions = questions[::-1]
+        show_question = questions[:5]
+        return render_template("list.html", questions=show_question)
     else:
-        questions = questions[::-1]
-            
+        if request.args:
+            order = request.args['order']
+            questions = myutility.sorting(order, questions)
+            if 'type' in request.args.keys():
+                if request.args['type'] == 'desc':
+                    questions = questions[::-1]
+        else:
+            questions = questions[::-1]
+        return render_template("list.html", questions=questions)
 
-    return render_template("list.html", questions=questions, q_header=QUESTIONS_HEADER)
 
+@app.route("/comments/<comment_id>/delete")
+def delete_comment(comment_id):
+    comment_id = int(comment_id)
+    question_id = 0
+    comments = data_manager.get_comment()
+    for comment in comments:
+        if comment["id"] == comment_id:
+            question_id = comment["question_id"]
+            if question_id is None:
+                answers = data_manager.get_answers()
+                for answer in answers:
+                    if answer['id'] == comment['answer_id']:
+                        question_id = answer["question_id"]
+    data_manager.delete_comment(comment_id)
+    return redirect(f'/question/{question_id}')
 
 
 @app.route("/question/<question_id>/delete", methods=['GET', 'POST'])
 def delete_question(question_id):
     question_id = int(question_id)
+    answers = data_manager.get_answers()
+    for answer in answers:
+        if answer['question_id'] == question_id:
+            data_manager.delete_answer_comment(answer['id'])
+    data_manager.delete_question_comment(question_id)
     data_manager.delete_answers(question_id)
     data_manager.delete_question(question_id)
-    question = data_manager.get_questions()
+
     return redirect("/list")
 
+@app.route('/answer/<answer_id>/delete')
+def delete_answer_page(answer_id):
+    answer_id= int(answer_id)
+    question_id = 0
+    answers = data_manager.get_answers()
+    for answer in answers:
+        if answer['id'] == answer_id:
+            question_id = answer["question_id"]
+            data_manager.delete_answer_comment(answer_id)
+            data_manager.delete_answer(answer_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/comment/<comment_id>/edit', methods=["GET","POST"])
+def edit_comment_page(comment_id):
+    comment_id = int(comment_id)
+    if request.method == 'POST':
+        edit_comment = request.form
+        question_id = request.args['question_id']
+        if question_id == "None":
+            answers = data_manager.get_answers()
+            answer_id = request.args['answer_id']
+            for answer in answers:
+                if answer['id'] == int(answer_id):
+                    question_id = answer['question_id']
+        data_manager.edit_comment(edit_comment,comment_id)
+        return redirect(f'/question/{question_id}')
+    if request.method == "GET":
+        comments = data_manager.get_comment()
+        for comment in comments:
+            if comment['id'] == comment_id:
+                return render_template('edit_comment.html', comment=comment, comment_id=comment_id )
+
+
+@app.route('/answer/<answer_id>/edit', methods=['GET','POST'])
+def edit_answer_page(answer_id):
+    answer_id =int(answer_id)
+    if request.method == 'POST':
+        edit_answer = request.form
+        question_id = request.args['question_id']
+        image_file = ""
+        if request.files["image"].filename != "":
+            image = request.files['image']
+            if not myutility.allowed_image_files(image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
+                print("file doesn't have the right extension")
+                return redirect(f'/answer/{answer_id}')
+            image_file = image.filename
+            image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
+        data_manager.edit_answer(answer_id, edit_answer, image_file)
+        return redirect(f'/question/{question_id}')
+    if request.method == "GET":
+        answers = data_manager.get_answers()
+        for answer in answers:
+            if answer['id'] == answer_id:
+                return render_template('edit_answer.html', answer=answer, answer_id=answer_id )
 
 @app.route('/question/<question_id>/edit', methods=['GET','POST'])
 def edit_question_page(question_id):
@@ -75,6 +157,28 @@ def edit_question_page(question_id):
             if question['id'] == question_id:
                 return render_template('edit_question.html', question=question, question_id=question_id )
 
+@app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
+def add_tag(question_id):
+    questions = data_manager.get_questions()
+    if request.method =="GET":
+        for question in questions:
+            if question['id'] == int(question_id):
+                return render_template("add_tag.html" , question=question)
+    else:
+        new_tag = request.form['tag']
+        data_manager.add_new_tag(new_tag)
+        tags = data_manager.get_tags()
+        id_tag = tags[-1]['id']
+        data_manager.add_tags_id(question_id,id_tag)
+        return redirect(f"/question/{question_id}")
+
+@app.route("/question/<question_id>/tag/<tag_id>/delete")
+def delete_tag(question_id,tag_id):
+    data_manager.delete_question_tag(tag_id)
+    data_manager.delete_tag(tag_id)
+    return redirect(f"/question/{question_id}")
+
+
 
 @app.route("/question/<question_id>", methods=['GET', 'POST'])
 def question_page(question_id):
@@ -82,10 +186,13 @@ def question_page(question_id):
     comments = data_manager.get_comment()
     questions = data_manager.get_questions()
     answers = data_manager.get_answers()
+    all_tags = data_manager.get_tags()
+    tag_ids = data_manager.get_questions_tag()
     show_comments_questions = []
     show_comments_answers = []
     show_question = {}
     show_answer = []
+    show_tags =[]
     if request.method == "POST":
         for answer in answers:
             if answer['question_id'] == question_id:
@@ -120,9 +227,14 @@ def question_page(question_id):
         for comment in comments:
             if comment['question_id'] == question_id:
                 show_comments_questions.append(comment)
+        for tag in tag_ids:
+            if tag['question_id'] == question_id:
+                for name_tag in all_tags:
+                    if tag['tag_id'] == name_tag['id']:
+                        show_tags.append(name_tag)
 
 
-        return render_template("question.html", question=show_question, answers=show_answer, q_header=QUESTIONS_HEADER, comments_question=show_comments_questions, comments_answers=show_comments_answers)
+        return render_template("question.html", question=show_question, answers=show_answer, comments_question=show_comments_questions, comments_answers=show_comments_answers, tags=show_tags)
 
 
 @app.route("/add-question")
@@ -172,18 +284,6 @@ def answer_page(question_id):
     return render_template('answer.html', question=show_question)
 
 
-@app.route('/answer/<answer_id>/delete')
-def delete_answer_page(answer_id):
-    answer_id= int(answer_id)
-    question_id = 0
-    answers = data_manager.get_answers()
-    for answer in answers:
-        if answer['id'] == answer_id:
-            question_id = answer["question_id"]
-            data_manager.delete_answer(answer_id)
-
-    return redirect(f'/question/{question_id}')
-
 
 @app.route('/add_vote')
 def add_vote_page():
@@ -209,6 +309,29 @@ def add_answer_comment(answer_id):
     data_manager.add_comment_answer(answer_id,new_message,time)
     return redirect(url_for("question_page", question_id=question_id))
 
+
+@app.route('/search', methods=["POST"])
+def search():
+    print("aici????")
+    word = request.form['search'].lower()
+    questions = data_manager.get_search_questions(word)
+    answers = data_manager.get_search_answers(word)
+    show_question=[]
+    if answers:
+        for answer in answers:
+            all_questions = data_manager.get_questions()
+            for question in all_questions:
+                if answer["question_id"] == question['id']:
+                    show_question.append(question)
+    for qst in questions:
+        if qst not in show_question:
+            show_question.append(qst)
+
+    # print(show_question)
+
+    # print(questions)
+    # print(answers)
+    return render_template("list_search.html", questions=show_question, answers=answers, word=word)
 
 
 if __name__ == "__main__":

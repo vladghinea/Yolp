@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}
- yolp-edit.question
+ yolp-edit.answer
 {% endblock %}
 {%  block content %}
-<h3 class="grey-text text-lighten-1">edit this question</h3>
-<form action="/question/{{ question_id }}/edit" method="POST" class="col s12" enctype="multipart/form-data" >
-    <input type="text" name="title" placeholder="Title" value="{{ question.title }}">
+<h3 class="grey-text text-lighten-1">edit this answer</h3>
+<form action="/answer/{{ answer_id }}/edit?question_id={{ answer.question_id }}" method="POST" class="col s12" enctype="multipart/form-data" >
     <br>
-    <label for="input_question_area">your new question</label>
-    <br>
-    <textarea name="message" id="input_question_area" cols="60" rows="70" placeholder="message">{{ question.message }}</textarea>
+    <textarea name="message" id="input_question_area" cols="60" rows="70" placeholder="message">{{ answer.message }}</textarea>
     <br>
     <div class="file-field input-field">
     <div class=" btn-small pink">

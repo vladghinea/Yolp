@@ -19,7 +19,15 @@
 <div class="navbar-fixed">
 <nav>
     <div class="nav-wrapper blue">
-      <a href="/list" class="brand-logo" style="padding-left: 18vh; font-size: 3em;">yolp</a>
+      <a href="/" class="brand-logo" style="padding-left: 18vh; font-size: 3em;">yolp</a>
+        <form style="padding-left: 155vh" method="post" action="/search">
+        <div class="input-field" style="display:inline-block">
+
+          <input id="search" type="search" name="search" required>
+          <label class="label-icon" for="search" ><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
     </div>
   </nav>
 </div>
