@@ -271,6 +271,16 @@ def delete_question_tag(cursor,tag_id):
     cursor.execute(query)
 
 @database_common.connection_handler
+def delete_question_tag_id(cursor,question_id):
+    query = f"""
+        DELETE
+        FROM question_tag
+        WHERE question_id = '{question_id}'
+        """
+    cursor.execute(query)
+
+
+@database_common.connection_handler
 def get_search_questions(cursor,word):
     query = f"""
         SELECT *

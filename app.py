@@ -70,6 +70,7 @@ def delete_question(question_id):
     for answer in answers:
         if answer['question_id'] == question_id:
             data_manager.delete_answer_comment(answer['id'])
+    data_manager.delete_question_tag_id(question_id)
     data_manager.delete_question_comment(question_id)
     data_manager.delete_answers(question_id)
     data_manager.delete_question(question_id)
