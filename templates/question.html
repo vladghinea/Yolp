@@ -32,25 +32,25 @@
                 <i onclick="window.location='/question/{{ question.id }}/tag/{{ tag.id }}/delete'" class="close material-icons">close</i>
               </div>
                 {% endfor %}
-            <a href="/question/{{ question.id }}/new-tag">add tag</a>
+            <a class="add_tag" href="/question/{{ question.id }}/new-tag">add tag+</a>
 
             </div>
             <div>
             <form method="post" action="/question/{{question.id}}/new-comment">
             <label for="new_comment_q">Your Short Comments</label>
             <input name="new_comment_q" placeholder="Enter short comment" type="text" id="new_comment_q" maxlength="25">
-            <button type="submit"class="waves-effect waves-light btn-small"><i class="material-icons">email</i></button>
+            <button type="submit"class="waves-effect waves-light btn-small"><span class="material-icons">email</span></button>
             </form>
             </div>
             {% for comment in comments_question %}
                 {% if comment.message != "" %}
                 <div class="comment_q">
-                 <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">
-                    <span>{{ comment.submission_time }}</span>
+                 <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
+                    <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
                     <span style=" margin: 20px 0">{{ comment.message }}</span>
-                    <span>Edited {{ comment.edited_count }} times</span>
-                    <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
-                        <span style="position: relative; bottom: 7px">edit</span>
+                    <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                    <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                        <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
                     </button>
                 </div>
                 {% endif %}
@@ -84,12 +84,15 @@
                 {% if comment.answer_id == answer.id %}
                     {% if comment.message != "" %}
                     <div class="comment_a">
-                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">
-                        <span>{{ comment.submission_time }}</span>
+                    <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
+{#                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">#}
+                        <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
                         <span style=" margin: 20px 0">{{ comment.message }}</span>
-                        <span>Edited {{ comment.edited_count }} times</span>
-                        <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
-                            <span style="position: relative; bottom: 7px">edit</span>
+                        <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                        <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                        <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
+{#                        <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">#}
+{#                            <span style="position: relative; bottom: 7px">edit</span>#}
                         </button>
                     </div>
                         {% endif %}

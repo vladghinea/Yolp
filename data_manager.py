@@ -47,7 +47,7 @@ def get_comment(cursor):
     query = """
         SELECT *
         FROM comment
-        ORDER BY id"""
+        ORDER BY submission_time DESC"""
     cursor.execute(query)
     return cursor.fetchall()
 

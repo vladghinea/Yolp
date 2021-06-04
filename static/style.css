@@ -50,30 +50,41 @@ a {
 
 .comment_q{
     background-color: #e0dfdf;
+    /*background-color: gold;*/
     position: relative;
     color: #629997;
+    /*color: #084941;*/
     font-size: 12px;
     padding: 6px;
     margin-top: 10px;
     border-radius: 20px 20px;
     margin-bottom: 5px;
+    box-shadow:  inset -5px 5px 5px -5px rgba(0,0,0,0.58);
     /*border-color: darkturquoise;*/
     /*border-width: 0px 2px 2px 2px;*/
     /*border-style: solid;*/
 }
+.comment_q:hover{
+    background-color: gold;
+    color: #084941;
+}
 .comment_a{
     position: relative;
     background-color: #e0dfdf;
+    /*background-color: gold;*/
     color: #629997;
+    /*color: #084941;*/
     font-size: 12px;
     padding: 6px;
 
     border-radius: 20px 20px;
     margin: 5px 20px;
 
-
 }
-
+.comment_a:hover {
+    background-color: gold;
+    color: #084941;
+}
 .answer {
 
     background-color: #f6f6f1;
@@ -98,3 +109,6 @@ button {
    margin-bottom: 10px;
 }
 
+.add_tag:hover {
+    color: maroon;
+}
