@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href={{ url_for ('static', filename='styles.css') }}>
     <title>
-        {% block title %}
-
-        {% endblock %}
+        Search | Yolp
     </title>
 </head>
 <body>
@@ -46,8 +44,14 @@
       <ul class="right hide-on-med-and-down">
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">sort descendent<i class="material-icons left" >filter_list</i></a></li>
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">sort ascendent<i class="material-icons left" style="transform: rotate(-180deg)">filter_list</i></a></li>
+            {% if 'username' in session %}
+                <li><a href="/user/{{ session.id }}" >{{ session.username }}</a></li>
+                <li><a href="/logout" >Logout</a></li>
+             {% else %}
+          <li><a href="/login" >Login</a></li>
+             {% endif %}
       </ul>
-        <form style="padding-left: 122vh" method="post" action="/search">
+        <form style="padding-left: 101vh" method="post" action="/search">
         <div class="input-field" style="display:inline-block">
 
           <input id="search" type="search" name="search" required>

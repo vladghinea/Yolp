@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ session.alias }}
+{% endblock %}
+{%  block content %}
+    <ul>
+    <li>User id: {{ user.id }} </li>
+    <li>User alias: {{ user.alias }} </li>
+    <li>User email: {{ user.username }} </li>
+    <li>User created accout at: {{ user.submission_time }} </li>
+    <li>Count of asked questions: </li>
+    <li>Count of answers: </li>
+    <li>Count of comments: </li>
+    <li>Reputation:</li>
+</ul>
+{% endblock %}

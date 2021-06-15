@@ -36,27 +36,42 @@ def get_questions_tag(cursor):
 @database_common.connection_handler
 def get_questions(cursor):
     query = """
-        SELECT *
+        SELECT question.id,question.submission_time,question.vote_number,question.view_number,question.title,question.message,question.image,users.alias
         FROM question
+        INNER JOIN users on question.users_id = users.id
         ORDER BY id"""
     cursor.execute(query)
     return cursor.fetchall()
 
 @database_common.connection_handler
-def get_comment(cursor):
+def get_users(cursor):
     query = """
         SELECT *
+        FROM users
+        """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+
+
+@database_common.connection_handler
+def get_comment(cursor):
+    query = """
+        SELECT comment.id,comment.question_id,comment.answer_id,comment.users_id,comment.message,comment.submission_time,comment.edited_count,users.alias
         FROM comment
-        ORDER BY submission_time DESC"""
+        INNER JOIN users on users.id = comment.users_id
+        ORDER BY comment.submission_time DESC"""
     cursor.execute(query)
     return cursor.fetchall()
 
 @database_common.connection_handler
 def get_answers(cursor):
     query = """
-        SELECT *
+        SELECT answer.id,answer.submission_time,answer.vote_number,answer.question_id,answer.users_id,answer.message,answer.image,users.alias
         FROM answer
-        ORDER BY id"""
+        INNER JOIN users on users.id = answer.users_id
+        ORDER BY answer.id"""
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -109,14 +124,21 @@ def update_answer_vote_minus(cursor,answer):
         """
     cursor.execute(query)
 
+@database_common.connection_handler
+def add_user(cursor,username,alias,hash_password):
+    query = f"""
+        INSERT INTO users (submission_time, alias, username, password, admin, reputation)     
+        VALUES (date_trunc('second', now()::timestamp), '{alias}', '{username}','{hash_password}',False,0)
+        """
+    cursor.execute(query)
 
 
 @database_common.connection_handler
 def add_answer(cursor,new_answer):
     new_message = new_answer['message'].replace("'", "''")
     query = f"""
-        INSERT INTO answer (submission_time, vote_number, question_id, message, image)     
-        VALUES ('{new_answer['submission_time']}', '{new_answer['vote_number']}', '{new_answer["question_id"]}','{new_message}','{new_answer["image"]}')
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image,users_id)     
+        VALUES ('{new_answer['submission_time']}', '{new_answer['vote_number']}', '{new_answer["question_id"]}','{new_message}','{new_answer["image"]}','{new_answer["users_id"]}')
         """
     cursor.execute(query)
 
@@ -125,8 +147,8 @@ def add_question(cursor,new_question):
     new_message = new_question['message'].replace("'", "''")
     new_title = new_question['title'].replace("'", "''")
     query = f"""
-        INSERT INTO question ( submission_time, view_number, vote_number, title, message, image)   
-        VALUES ('{new_question['submission_time']}', '{new_question['view_number']}', '{new_question["vote_number"]}','{new_title}','{new_message}','{new_question["image"]}')
+        INSERT INTO question ( submission_time, view_number, vote_number, title, message, image,users_id)   
+        VALUES ('{new_question['submission_time']}', '{new_question['view_number']}', '{new_question["vote_number"]}','{new_title}','{new_message}','{new_question["image"]}','{new_question["users_id"]}')
         """
     cursor.execute(query)
 
@@ -218,20 +240,20 @@ def edit_answer(cursor,answer_id, edit_answer, image_file):
 
 
 @database_common.connection_handler
-def add_comment_answer(cursor,answer_id,new_message,time):
+def add_comment_answer(cursor,answer_id,new_message,time,users_id):
     n_message = new_message.replace("'","''")
     query = f"""
-        INSERT INTO comment ( answer_id, message, submission_time, edited_count)
-        VALUES ('{answer_id}','{n_message}','{time}' ,'0')
+        INSERT INTO comment ( answer_id, message, submission_time, edited_count,users_id)
+        VALUES ('{answer_id}','{n_message}','{time}' ,'0','{users_id}')
         """
     cursor.execute(query)
 
 @database_common.connection_handler
-def add_comment_question(cursor,question_id,new_message,time):
+def add_comment_question(cursor,question_id,new_message,time,users_id):
     n_message = new_message.replace("'", "''")
     query = f"""
-        INSERT INTO comment ( question_id, message, submission_time, edited_count)
-        VALUES ('{question_id}','{n_message}','{time}','0' )
+        INSERT INTO comment ( question_id, message, submission_time, edited_count,users_id)
+        VALUES ('{question_id}','{n_message}','{time}','0','{users_id}' )
         """
     cursor.execute(query)
 

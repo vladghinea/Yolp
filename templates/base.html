@@ -11,7 +11,7 @@
     <title>
         {% block title %}
 
-        {% endblock %}
+        {% endblock %} | Yolp
     </title>
 </head>
 <body>
@@ -20,7 +20,14 @@
 <nav>
     <div class="nav-wrapper blue" >
       <a href="/" class="brand-logo" style="padding-left: 18vh; font-size: 3em;">yolp</a>
-
+         <ul class="right hide-on-med-and-down">
+             {% if 'username' in session %}
+                <li><a href="/user/{{ session.id }}" >{{ session.username }}</a></li>
+                <li><a href="/logout" >Logout</a></li>
+             {% else %}
+          <li><a href="/login" >Login</a></li>
+             {% endif %}
+      </ul>
         <form style="padding-left: 140vh" method="post" action="/search">
         <div class="input-field" style="display:inline-block">
 
@@ -29,7 +36,7 @@
           <i class="material-icons">close</i>
         </div>
       </form>
-    <a href="/login" class="right" style="padding-left: 180vh;font-size: 1em">Login</a>
+
     </div>
 
   </nav>

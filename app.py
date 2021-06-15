@@ -1,12 +1,14 @@
 import datetime
 from datetime import datetime
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import os
 import myutility
 import data_manager
+import login
 
 
 app = Flask(__name__)
+app.secret_key = 'DMiKcAZYyICQUsGkGZLfPg'
 
 vlad = '/home/vlad/projects/ask-mate-3-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-3-python-vladghinea/static/images/uploads'
@@ -182,17 +184,20 @@ def question_page(question_id):
                 image_filename = image.filename
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         dict_answers = myutility.init_answer_and_question(new_answer, "a", image_filename, question_id)
+        dict_answers['users_id'] = session['id']
         data_manager.add_answer(dict_answers)
         return redirect(url_for("question_page", question_id=question_id))
 
     else:
         for question in questions:
+
             if question['id'] == question_id:
                 new_views = str(int(question["view_number"]) + 1)
                 data_manager.update_question_views(question_id,int(new_views))
                 question['view_number'] = new_views
                 show_question = question
         for answer in answers:
+
             if answer['question_id'] == question_id:
                 for comment in comments:
                     if answer['id'] == comment['answer_id']:
@@ -227,6 +232,7 @@ def add():
         image_filename = image.filename
         image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         new_dict['image'] = image_filename
+    new_dict['users_id'] = session['id']
     data_manager.add_question(new_dict)
     questions = data_manager.get_questions()
     return redirect(f"/question/{questions[-1]['id']}")
@@ -254,8 +260,9 @@ def add_vote_page():
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def add_question_comment(question_id):
     new_message = request.form['new_comment_q']
+    users_id = session['id']
     time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data_manager.add_comment_question(question_id, new_message, time)
+    data_manager.add_comment_question(question_id, new_message, time,users_id)
     return redirect(url_for("question_page", question_id=question_id))
 
 
@@ -263,8 +270,9 @@ def add_question_comment(question_id):
 def add_answer_comment(answer_id):
     new_message = request.form['new_comment_a']
     question_id = request.args['question_id']
+    users_id = session['id']
     time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data_manager.add_comment_answer(answer_id,new_message,time)
+    data_manager.add_comment_answer(answer_id,new_message,time,users_id)
     return redirect(url_for("question_page", question_id=question_id))
 
 
@@ -285,6 +293,55 @@ def search():
             show_question.append(qst)
     return render_template("list_search.html", questions=show_question, answers=answers, word=word)
 
+
+@app.route('/login', methods=['GET','POST'])
+def get_login():
+    users = data_manager.get_users()
+    if request.method == "POST":
+        username = request.form['username']
+        for user in users:
+            if username == user['username']:
+                password = request.form['password']
+                hash_password = str(user['password'])
+                if login.verify_password(password, hash_password):
+                    session['username'] = user['alias']
+                    session['id'] = user['id']
+                    return redirect('/')
+
+    return render_template("login.html")
+
+@app.route('/registration', methods=['GET','POST'])
+def registration():
+    users = data_manager.get_users()
+    if request.method == "POST":
+        username = request.form['username']
+        if username not in users:
+            alias = request.form['alias']
+            password = request.form['password']
+            hash_password = login.hash_password(password)
+            data_manager.add_user(username,alias,hash_password)
+            return redirect('/login')
+
+    return render_template("registration.html")
+
+
+@app.route('/user/<user_id>')
+def user_page(user_id):
+    user_id = int(user_id)
+    users = data_manager.get_users()
+    for user in users:
+        if user["id"] == user_id:
+            return render_template('user.html',user=user)
+    return redirect("/")
+
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session["id"] = '3'
+    print(session)
+    return redirect(url_for('list_page'))
 
 if __name__ == "__main__":
     app.config["UPLOAD_FOLDER"] = "/static/images"

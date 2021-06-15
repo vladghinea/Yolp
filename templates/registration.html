@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}
+  Registration
+{% endblock %}
+{%  block content %}
+    <div class="grey-text text-lighten-1">
+    <p>Please Registration</p>
+    </div>
+    <div class="login-form" style="text-align: center">
+
+    <form action="/registration" method="post">
+        <input name="alias" type="text" placeholder="alias"><BR>
+        <input name="username" type="email" placeholder="name@mail.com"><BR>
+        <input name="password" type="password" placeholder="password"><br>
+
+        <button class="btn-small pink" type="submit">Register</button><br>
+
+    </form>
+
+    </div>
+{% endblock %}

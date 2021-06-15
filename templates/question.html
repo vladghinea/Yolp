@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}
-  question
+  Question
 {% endblock %}
 {%  block content %}
             <div class="question card-panel">
             <div class="s12 m4 l2 align-center p4" >
              <p class="time" > {{ question.submission_time }}</p>
+                <p class="time">{{ question.alias }}</p>
                 <h4 class="center-align p25 ">{{ question.title}}</h4>
                 <br />
             </div>
@@ -44,6 +45,7 @@
             </div>
             {% for comment in comments_question %}
                 {% if comment.message != "" %}
+                    <p class="time">{{ comment.alias }}</p>
                 <div class="comment_q">
                  <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
                     <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
@@ -60,7 +62,9 @@
     <hr style="border: 1px solid cadetblue">
     <br>
     {% for answer in answers  %}
+
         <div class="answer card-panel">
+        <p class="time">{{ answer.alias }}</p>
             <p>answer: <span class="time" > {{ answer.submission_time }}</span></p>
             <p class="mybody-text" id="{{ answer.id }}">
                 {{ answer.message }}
@@ -83,6 +87,7 @@
 
                 {% if comment.answer_id == answer.id %}
                     {% if comment.message != "" %}
+                        <p class="time">{{ comment.alias }}</p>
                     <div class="comment_a">
                     <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
 {#                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">#}
