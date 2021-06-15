@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}
+  question
+{% endblock %}
+{%  block content %}
+            <div class="question card-panel">
+            <div class="s12 m4 l2 align-center p4" >
+             <p class="time" > {{ question.submission_time }}</p>
+                <h4 class="center-align p25 ">{{ question.title}}</h4>
+                <br />
+            </div>
+
+
+            <div>
+                <p class="mybody-text"> {{ question.message }}</p>
+            </div>
+            <div>
+            <p>views: {{ question.view_number }}</p>
+
+        {#    {% if question.image %}#}
+            <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="330px">
+        {#    {% endif %}#}
+            </div>
+            <div style="padding-bottom: 10px">
+            <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
+            <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
+            </div>
+            <div class="tag-container">
+                {% for tag in tags%}
+            <div class="chip">
+                {{ tag.name }}
+                <i onclick="window.location='/question/{{ question.id }}/tag/{{ tag.id }}/delete'" class="close material-icons">close</i>
+              </div>
+                {% endfor %}
+            <a class="add_tag" href="/question/{{ question.id }}/new-tag">add tag+</a>
+
+            </div>
+            <div>
+            <form method="post" action="/question/{{question.id}}/new-comment">
+            <label for="new_comment_q">Your Short Comments</label>
+            <input name="new_comment_q" placeholder="Enter short comment" type="text" id="new_comment_q" maxlength="25">
+            <button type="submit"class="waves-effect waves-light btn-small"><span class="material-icons">email</span></button>
+            </form>
+            </div>
+            {% for comment in comments_question %}
+                {% if comment.message != "" %}
+                <div class="comment_q">
+                 <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
+                    <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
+                    <span style=" margin: 20px 0">{{ comment.message }}</span>
+                    <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                    <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                        <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
+                    </button>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+    <br>
+    <hr style="border: 1px solid cadetblue">
+    <br>
+    {% for answer in answers  %}
+        <div class="answer card-panel">
+            <p>answer: <span class="time" > {{ answer.submission_time }}</span></p>
+            <p class="mybody-text" id="{{ answer.id }}">
+                {{ answer.message }}
+            </p>
+            {%  if answer.image %}
+                <img src="/static/images/uploads/{{ answer['image'] }}" alt="" height="70px"><br>
+            {% endif %}
+
+             <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/answer/{{ answer.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
+            <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/answer/{{ answer.id }}/edit'">edit</button>
+{#             <button class="btn white lighten-4 waves-effect waves-light z-depth-2" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'" style="margin-left: 20vh"> <span class="green-text text-lighten-1" style="font-weight: bold">vote: {{ answer.vote_number }}</span></button>#}
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
+             <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+            <form method="post" action="/answer/{{answer.id}}/new-comment?question_id={{ answer.question_id }}">
+            <label for="new_comment_a">Your Short Comments</label>
+            <input name="new_comment_a" placeholder="Enter short comment" type="text" id="new_comment_a" maxlength="25">
+            <button type="submit" class="waves-effect waves-light btn-small"><i class="material-icons">email</i></button>
+            </form>
+            {% for comment in comments_answers %}
+
+                {% if comment.answer_id == answer.id %}
+                    {% if comment.message != "" %}
+                    <div class="comment_a">
+                    <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
+{#                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">#}
+                        <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
+                        <span style=" margin: 20px 0">{{ comment.message }}</span>
+                        <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                        <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
+                        <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
+{#                        <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">#}
+{#                            <span style="position: relative; bottom: 7px">edit</span>#}
+                        </button>
+                    </div>
+                        {% endif %}
+                 {% endif %}
+            {% endfor %}
+
+        </div>
+
+    {% endfor %}
+
+    <a href="/question/{{ question.id }}/new-answer" class="btn-floating blue pulse"> add</a>
+
+{% endblock %}
