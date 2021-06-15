@@ -14,32 +14,15 @@ home = os.path.join(app.root_path, 'static/images/uploads')
 app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
+
 @app.route("/")
 @app.route("/list")
 def list_page():
     data_manager.count_no_null()
-    questions = data_manager.get_questions()
-    if request.path == '/':
-        if request.args:
-            order = request.args['order']
-            questions = myutility.sorting(order, questions)
-            if 'type' in request.args.keys():
-                if request.args['type'] == 'desc':
-                    questions = questions[::-1]
-        else:
-            questions = questions[::-1]
-        show_question = questions[:5]
-        return render_template("list.html", questions=show_question)
-    else:
-        if request.args:
-            order = request.args['order']
-            questions = myutility.sorting(order, questions)
-            if 'type' in request.args.keys():
-                if request.args['type'] == 'desc':
-                    questions = questions[::-1]
-        else:
-            questions = questions[::-1]
-        return render_template("list.html", questions=questions)
+    request_path = request.path
+    request_args = request.args
+    questions = myutility.list_page(request_path,request_args)
+    return render_template("list.html", questions=questions)
 
 
 @app.route("/comments/<comment_id>/delete")

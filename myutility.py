@@ -3,7 +3,7 @@ import data_manager
 from operator import itemgetter
 
 
-
+# Initialize an answer/question
 def init_answer_and_question(new_item, item_type, image_filename, question_id=0):
     if item_type == "a":
         dict_answers = dict()
@@ -27,12 +27,12 @@ def init_answer_and_question(new_item, item_type, image_filename, question_id=0)
         dict_question['image'] = image_filename
         return  dict_question
 
-
+# Sorting list page
 def sorting(order, questions):
     ordered_questions = sorted(questions, key=itemgetter(order))
     return ordered_questions
 
-
+#Adding vote to question or answer
 def add_vote(request_args):
     if request_args['type_vote'] == 'question':
         questions = data_manager.get_questions()
@@ -56,6 +56,7 @@ def add_vote(request_args):
         return f"/question/{request_args['question_id']}"
 
 
+# Allow image extension
 def allowed_image_files(filename, allowed_extensions):
     if not '.' in filename:
         return False
@@ -64,3 +65,30 @@ def allowed_image_files(filename, allowed_extensions):
         return True
     else:
         return False
+
+
+# List home page in specify order with 5 or all questions
+def list_page(request_path,request_args):
+    questions = data_manager.get_questions()
+    if request_path == '/':
+        if request_args:
+            order = request_args['order']
+            questions = sorting(order, questions)
+            if 'type' in request_args.keys():
+                if request_args['type'] == 'desc':
+                    questions = questions[::-1]
+        else:
+            questions = questions[::-1]
+        show_question = questions[:5]
+        return show_question
+    else:
+        if request_args:
+            order = request_args['order']
+            questions = sorting(order, questions)
+            if 'type' in request_args.keys():
+                if request_args['type'] == 'desc':
+                    questions = questions[::-1]
+        else:
+            questions = questions[::-1]
+        return questions
+
