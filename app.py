@@ -2,20 +2,16 @@ import datetime
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, url_for
 import os
-import data_handler
 import myutility
 import data_manager
-
-ANSWERS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
-QUESTIONS_FILE_PATH = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 
 
 app = Flask(__name__)
 
-vlad = '/home/vlad/projects/ask-mate-2-python-vladghinea/static/images/uploads/'
-lamine = '/home/keitkalon/projects/web/ask-mate-2-python-vladghinea/static/images/uploads'
+vlad = '/home/vlad/projects/ask-mate-3-python-vladghinea/static/images/uploads/'
+lamine = '/home/keitkalon/projects/web/ask-mate-3-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 @app.route("/")
@@ -74,7 +70,6 @@ def delete_question(question_id):
     data_manager.delete_question_comment(question_id)
     data_manager.delete_answers(question_id)
     data_manager.delete_question(question_id)
-
     return redirect("/list")
 
 @app.route('/answer/<answer_id>/delete')
@@ -87,7 +82,6 @@ def delete_answer_page(answer_id):
             question_id = answer["question_id"]
             data_manager.delete_answer_comment(answer_id)
             data_manager.delete_answer(answer_id)
-
     return redirect(f'/question/{question_id}')
 
 
@@ -134,12 +128,12 @@ def edit_answer_page(answer_id):
             if answer['id'] == answer_id:
                 return render_template('edit_answer.html', answer=answer, answer_id=answer_id )
 
+
 @app.route('/question/<question_id>/edit', methods=['GET','POST'])
 def edit_question_page(question_id):
     question_id = int(question_id)
     if request.method == 'POST':
         edit_question = request.form
-
         image_file = ""
         if request.files["image"].filename != "":
             image = request.files['image']
@@ -149,7 +143,6 @@ def edit_question_page(question_id):
             image_file = image.filename
             image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         data_manager.edit_question(question_id, edit_question, image_file)
-
         return redirect(f'/question/{question_id}')
 
     elif request.method == 'GET':
@@ -173,12 +166,12 @@ def add_tag(question_id):
         data_manager.add_tags_id(question_id,id_tag)
         return redirect(f"/question/{question_id}")
 
+
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
 def delete_tag(question_id,tag_id):
     data_manager.delete_question_tag(tag_id)
     data_manager.delete_tag(tag_id)
     return redirect(f"/question/{question_id}")
-
 
 
 @app.route("/question/<question_id>", methods=['GET', 'POST'])
@@ -205,11 +198,8 @@ def question_page(question_id):
             if image:
                 image_filename = image.filename
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
-
-        dict_answers = myutility.init_answer_and_question(new_answer, answers, "a", image_filename, question_id)
-
+        dict_answers = myutility.init_answer_and_question(new_answer, "a", image_filename, question_id)
         data_manager.add_answer(dict_answers)
-
         return redirect(url_for("question_page", question_id=question_id))
 
     else:
@@ -234,7 +224,6 @@ def question_page(question_id):
                     if tag['tag_id'] == name_tag['id']:
                         show_tags.append(name_tag)
 
-
         return render_template("question.html", question=show_question, answers=show_answer, comments_question=show_comments_questions, comments_answers=show_comments_answers, tags=show_tags)
 
 
@@ -246,32 +235,17 @@ def add_question_page():
 @app.route("/add", methods=['POST'])
 def add():
     image_filename = ""
-    old_data = data_manager.get_questions()
-    print(old_data)
     new = request.form
-    print(new)
-    # new_id = int(old_data[-1]['id']) +1
-    new_dict = myutility.init_answer_and_question(new, old_data, "q", image_filename)
-    print(f"reqest.file: {request.files}")
-    image_frame=0
-
-    # if request.files:
+    new_dict = myutility.init_answer_and_question(new, "q", image_filename)
     if request.files["image"].filename != "":
         image = request.files['image']
-
         if not myutility.allowed_image_files( image.filename, app.config['ALLOWED_IMAGE_EXTENSION']):
-            print("file doesn't have the right extension")
             return redirect(f"/question/{new_dict['id']}")
-
-        image_frame = 1
         image_filename = image.filename
         image.save(os.path.join(app.config['IMAGE_UPLOADS'], image.filename))
         new_dict['image'] = image_filename
-    print(new_dict)
-    print(f"{old_data[-1]['id']}")
     data_manager.add_question(new_dict)
     questions = data_manager.get_questions()
-    print(questions[-1])
     return redirect(f"/question/{questions[-1]['id']}")
 
 
@@ -283,7 +257,6 @@ def answer_page(question_id):
         if question['id'] == question_id:
             show_question = question
     return render_template('answer.html', question=show_question)
-
 
 
 @app.route('/add_vote')
@@ -302,6 +275,7 @@ def add_question_comment(question_id):
     data_manager.add_comment_question(question_id, new_message, time)
     return redirect(url_for("question_page", question_id=question_id))
 
+
 @app.route('/answer/<answer_id>/new-comment' , methods=['GET','POST'])
 def add_answer_comment(answer_id):
     new_message = request.form['new_comment_a']
@@ -313,7 +287,6 @@ def add_answer_comment(answer_id):
 
 @app.route('/search', methods=["POST"])
 def search():
-    print("aici????")
     word = request.form['search'].lower()
     questions = data_manager.get_search_questions(word)
     answers = data_manager.get_search_answers(word)
@@ -327,11 +300,6 @@ def search():
     for qst in questions:
         if qst not in show_question:
             show_question.append(qst)
-
-    # print(show_question)
-
-    # print(questions)
-    # print(answers)
     return render_template("list_search.html", questions=show_question, answers=answers, word=word)
 
 

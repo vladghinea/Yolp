@@ -1,7 +1,13 @@
 
 body {
-    background: gold;
+    /*background: gold;*/
+    background-image: url("images/uploads/euro2.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-attachment: fixed;
+    height: 100%;
     display: flex;
+    position: sticky;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
@@ -111,4 +117,8 @@ button {
 
 .add_tag:hover {
     color: maroon;
+}
+
+.right{
+    float: right;
 }

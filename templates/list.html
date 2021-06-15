@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href={{ url_for ('static', filename='style.css') }}>
+    <link rel="stylesheet" href={{ url_for ('static', filename='styles.css') }}>
     <title>
         {% block title %}
 
@@ -42,12 +42,14 @@
 </ul>
     <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="padding-left: 18vh; font-size: 3em;">yolp</a>
-
       <ul class="right hide-on-med-and-down">
+
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">sort descendent<i class="material-icons left" >filter_list</i></a></li>
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">sort ascendent<i class="material-icons left" style="transform: rotate(-180deg)">filter_list</i></a></li>
+{#          aici de pus un if #}
+          <li><a href="/login" >Login</a></li>
       </ul>
-        <form style="padding-left: 122vh" method="post" action="/search">
+        <form style="padding-left: 108vh" method="post" action="/search">
         <div class="input-field" style="display:inline-block">
 
           <input id="search" type="search" name="search" required>
