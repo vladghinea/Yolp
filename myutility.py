@@ -38,7 +38,9 @@ def add_vote(request_args,session_id):
         questions = data_manager.get_questions()
         for question in questions:
             if question["id"] == int(request_args['id']):
-                if session_id != int(request_args['id']) :
+                print(session_id)
+                print(request_args["user_id"])
+                if session_id != int(request_args['user_id']) :
                     if session_id != None:
                         if request_args["operation"] == "plus":
                             data_manager.update_question_vote_plus(question)
@@ -51,7 +53,7 @@ def add_vote(request_args,session_id):
         answers = data_manager.get_answers()
         for answer in answers:
             if answer['id'] == int(request_args['id']):
-                if session_id != int(request_args['id']):
+                if session_id != int(request_args['user_id']) :
                     if session_id != None:
                         if request_args["operation"] == "plus":
                             data_manager.update_answer_vote_plus(answer)

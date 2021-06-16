@@ -103,8 +103,8 @@
                                 {% endif %}
                                 <button class="btn-floating white waves-effect waves-light" style="position: absolute; left: 65px;"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="position: absolute; left: 120px; top: 20px ">{{ question.view_number }}</span>
                                 <img src="/static/images/sigla_Euro2020.png" alt="text_euro" height="40px" style="display: block; margin-left: auto; margin-right: auto;">
-                                <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=plus'" style="position: absolute; right: 90px; top: 10px"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 65px; top: 20px">{{ question.vote_number }}</span>
-                                <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=minus'" style="position: absolute; right: 15px; top: 10px"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
+                                <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=plus&user_id={{ question.users_id }}'" style="position: absolute; right: 90px; top: 10px"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 65px; top: 20px">{{ question.vote_number }}</span>
+                                <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=minus&user_id={{ question.users_id }}'" style="position: absolute; right: 15px; top: 10px"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
 
                             </div>
                     </div>

@@ -261,6 +261,7 @@ def answer_page(question_id):
 @app.route('/add_vote')
 def add_vote_page():
     request_args = request.args
+
     session_id = session['id']
     print(session_id)
     print(request_args)
