@@ -122,3 +122,71 @@ button {
 .right{
     float: right;
 }
+
+.topcard {
+    background-color: #ffffff;
+
+    padding: 10px 40px;
+    margin: 0;
+    box-shadow:         inset 0 0 10px #d4cfcf;
+    z-index: 2;
+}
+
+.card-panel.hoverable.white.lighten-5 {
+    padding: 0;
+    position: relative;
+}
+.card-panel.hoverable.white.lighten-5::after {
+    position: absolute;
+    content: '';
+    top: 85px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-image: url("/static/images/Untitled.png") ;
+    background-size: 100%;
+    opacity: 0.15;
+}
+
+.bottomcard {
+    /*background-color: #ffffff;*/
+    padding: 0px 0px;
+    box-shadow:         inset 0 0 10px #d4cfcf;
+
+}
+
+.light-grey.light2 {
+    padding: 0;
+    margin: 0;
+}
+
+.card-action {
+    /*background: linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(32,141,215,1) 44%, rgba(0,212,255,1) 100%);*/
+    background: linear-gradient(90deg, rgba(0,255,179,0.4766281512605042) 0%, rgba(0,212,255,0.41220238095238093) 36%, rgba(0,212,255,0.41780462184873945) 59%, rgba(0,255,192,0.4654236694677871) 100%);
+    position: relative;
+    text-align: center;
+    padding: 10px 40px;
+    box-shadow:         inset 0 0 10px #d4cfcf;
+    border-top-color: #342a2a;
+    border-top-width: 4px;
+    border-top-style: solid;
+    z-index: 2;
+
+}
+.user_container {
+    padding: 50px;
+    text-align: left;
+}
+.user > li {
+    margin: 12px;
+
+}
+.def_text {
+    font-size: 20px;
+    color: #084941;
+}
+.rez_text {
+    font-size: 20px;
+    font-weight: bold;
+    color: brown;
+}

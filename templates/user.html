@@ -3,14 +3,16 @@
   {{ session.alias }}
 {% endblock %}
 {%  block content %}
-    <ul>
-    <li>User id: {{ user.id }} </li>
-    <li>User alias: {{ user.alias }} </li>
-    <li>User email: {{ user.username }} </li>
-    <li>User created accout at: {{ user.submission_time }} </li>
-    <li>Count of asked questions: </li>
-    <li>Count of answers: </li>
-    <li>Count of comments: </li>
-    <li>Reputation:</li>
-</ul>
+    <div class="user_container">
+        <ul class="user">
+            <li><span class="def_text">User id: &nbsp</span> <span class="rez_text">{{ user.id }}</span></li>
+            <li><span class="def_text">User alias: &nbsp</span> <span class="rez_text">{{ user.alias }} </span></li>
+            <li><span class="def_text">User email: &nbsp</span> <span class="rez_text">{{ user.username }}</span> </li>
+            <li><span class="def_text">User created accout at: &nbsp</span> <span class="rez_text">{{ user.submission_time }}</span> </li>
+            <li><span class="def_text">Count of asked questions: &nbsp</span> </li>
+            <li><span class="def_text">Count of answers: &nbsp</span> </li>
+            <li><span class="def_text">Count of comments: &nbsp</span></li>
+            <li><span class="def_text">Reputation: &nbsp</span></li>
+        </ul>
+    </div>
 {% endblock %}
