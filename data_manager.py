@@ -32,11 +32,32 @@ def get_questions_tag(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
+@database_common.connection_handler
+def get_all_data_tags(cursor):
+    query = """
+        SELECT tag.id,tag.name,count(qt.tag_id) as tags_count
+        FROM tag
+        LEFT JOIN question_tag qt on tag.id = qt.tag_id
+        GROUP BY tag.id
+        ORDER BY tag.id"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+@database_common.connection_handler
+def get_all_tags_with_id(cursor):
+    query = """
+        SELECT tag.id, tag.name, string_agg(to_char(qt.question_id ,'99'),',') as ides
+        FROM tag
+        LEFT JOIN question_tag qt on tag.id = qt.tag_id
+        GROUP BY tag.id
+        ORDER BY tag.id"""
+    cursor.execute(query)
+    return cursor.fetchall()
 
 @database_common.connection_handler
 def get_questions(cursor):
     query = """
-        SELECT question.id,question.submission_time,question.vote_number,question.view_number,question.title,question.message,question.image,users.alias
+        SELECT question.id,question.submission_time,question.vote_number,question.view_number,question.title,question.message,question.image,question.users_id,users.alias
         FROM question
         INNER JOIN users on question.users_id = users.id
         ORDER BY id"""
@@ -68,7 +89,7 @@ def get_comment(cursor):
 @database_common.connection_handler
 def get_answers(cursor):
     query = """
-        SELECT answer.id,answer.submission_time,answer.vote_number,answer.question_id,answer.users_id,answer.message,answer.image,users.alias
+        SELECT answer.id,answer.submission_time,answer.vote_number,answer.question_id,answer.users_id,answer.message,answer.accepted,answer.image,users.alias
         FROM answer
         INNER JOIN users on users.id = answer.users_id
         ORDER BY answer.id"""
@@ -81,6 +102,27 @@ def update_question_views(cursor,question_id,new_views):
         UPDATE question
         SET view_number = '{new_views}'
         WHERE id = '{question_id}'
+        """
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def update_answear_accepted_to_fals(cursor,answer):
+    query = f"""
+            UPDATE answer
+            SET accepted = FALSE
+            WHERE question_id = '{answer["question_id"]}'
+            """
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def update_answear_accepted(cursor,answer):
+    update_answear_accepted_to_fals(answer)
+    query = f"""
+        UPDATE answer
+        SET accepted = TRUE
+        WHERE id = '{answer['id']}'
         """
     cursor.execute(query)
 
@@ -268,11 +310,25 @@ def add_new_tag(cursor,tag):
 
 @database_common.connection_handler
 def add_tags_id(cursor,question_id,tag_id):
+    try:
+        query = f"""
+            INSERT INTO question_tag (question_id,tag_id)
+            VALUES ('{question_id}','{tag_id}')
+    
+            """
+        cursor.execute(query)
+    except:
+        print('error')
+
+@database_common.connection_handler
+def get_tag_id(cursor,new_tag):
     query = f"""
-        INSERT INTO question_tag (question_id, tag_id)
-        VALUES ('{question_id}','{tag_id}')
-        """
+            SELECT id
+            FROM tag
+            WHERE name ILIKE '{new_tag}'
+            """
     cursor.execute(query)
+    return cursor.fetchall()
 
 @database_common.connection_handler
 def delete_tag(cursor,tag_id):
@@ -284,11 +340,11 @@ def delete_tag(cursor,tag_id):
     cursor.execute(query)
 
 @database_common.connection_handler
-def delete_question_tag(cursor,tag_id):
+def delete_question_tag(cursor,tag_id,question_id):
     query = f"""
         DELETE
         FROM question_tag
-        WHERE tag_id = '{tag_id}'
+        WHERE tag_id = '{tag_id}' and question_id = '{question_id}'
         """
     cursor.execute(query)
 
@@ -301,13 +357,13 @@ def delete_question_tag_id(cursor,question_id):
         """
     cursor.execute(query)
 
-
 @database_common.connection_handler
 def get_search_questions(cursor,word):
     query = f"""
-        SELECT *
+        SELECT question.id,question.submission_time,question.vote_number,question.view_number,question.title,question.message,question.image,question.users_id,users.alias
         FROM question 
-        WHERE LOWER(question.message)  LIKE '%{word}%' or LOWER(question.title) LIKE '%{word}%'
+        INNER JOIN users on question.users_id = users.id
+        WHERE LOWER(question.message)  ILIKE '%{word}%' or LOWER(question.title) ILIKE '%{word}%'
         ORDER BY question.id
         """
     cursor.execute(query)
@@ -318,8 +374,53 @@ def get_search_answers(cursor,word):
     query = f"""
         SELECT *
         FROM answer 
-        WHERE LOWER(answer.message)  LIKE '%{word}%' 
+        WHERE LOWER(answer.message)  ILIKE '%{word}%' 
         ORDER BY answer.id
         """
     cursor.execute(query)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def update_reputation_question_plus(cursor,question):
+    query = f"""
+        UPDATE users
+        SET reputation = reputation + 5
+        WHERE id = '{question['users_id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_reputation_answer_plus(cursor,answer):
+    query = f"""
+        UPDATE users
+        SET reputation = reputation + 10
+        WHERE id = '{answer['users_id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_reputation_question_minus(cursor,question):
+    query = f"""
+        UPDATE users
+        SET reputation = reputation -2
+        WHERE id = '{question['users_id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_reputation_answer_minus(cursor,answer):
+    query = f"""
+        UPDATE users
+        SET reputation = reputation -2
+        WHERE id = '{answer['users_id']}'
+        """
+    cursor.execute(query)
+
+@database_common.connection_handler
+def update_reputation_accepted(cursor,answer):
+    query = f"""
+        UPDATE users
+        SET reputation = reputation + 15
+        WHERE id = '{answer['users_id']}'
+        """
+    cursor.execute(query)

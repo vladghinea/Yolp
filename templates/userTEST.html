@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href={{ url_for ('static', filename='styles.css') }}>
     <title>
-        Home | Yolp
+        Search | Yolp
     </title>
 </head>
 <body>
@@ -40,20 +40,18 @@
 </ul>
     <div class="nav-wrapper blue">
       <a href="/list" class="brand-logo" style="padding-left: 18vh; font-size: 3em;">yolp</a>
-      <ul class="right hide-on-med-and-down">
 
+      <ul class="right hide-on-med-and-down">
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">sort descendent<i class="material-icons left" >filter_list</i></a></li>
           <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">sort ascendent<i class="material-icons left" style="transform: rotate(-180deg)">filter_list</i></a></li>
             {% if 'username' in session %}
-                <li><a href="/tags">Tags</a></li>
-                <li><a href="/users">Users</a></li>
                 <li><a href="/user/{{ session.id }}" >{{ session.username }}</a></li>
                 <li><a href="/logout" >Logout</a></li>
              {% else %}
           <li><a href="/login" >Login</a></li>
              {% endif %}
       </ul>
-        <form style="padding-left: 80vh" method="post" action="/search">
+        <form style="padding-left: 101vh" method="post" action="/search">
         <div class="input-field" style="display:inline-block">
 
           <input id="search" type="search" name="search" required>
@@ -71,34 +69,64 @@
 <img src="/static/images/2logo-euro-2020.png" alt="sigla-euro-2020" height="300px" style="position: fixed; left: 90px; top: 250px;">
 <div class="container row" id="plansa">
 {#    <div class=" container s12 m4 l8">#}
+{#    <div class="container row s12 m4 l8 card-panel hoverable " id="inplansa">#}
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
+    <div class="user_container">
+        <ul class="user">
+            <li><span class="def_text">User id: &nbsp</span> <span class="rez_text">{{ user.id }}</span></li>
+            <li><span class="def_text">User alias: &nbsp</span> <span class="rez_text">{{ user.alias }} </span></li>
+            <li><span class="def_text">User email: &nbsp</span> <span class="rez_text">{{ user.username }}</span> </li>
+            <li><span class="def_text">User created accout at: &nbsp</span> <span class="rez_text">{{ user.submission_time }}</span> </li>
+            <li><span class="def_text">Count of asked questions: &nbsp</span> <span class="rez_text">{{ user.question_count }}</span></li>
+            <li><span class="def_text">Count of answers: &nbsp</span> <span class="rez_text">{{ user.answer_count }}</span></li>
+            <li><span class="def_text">Count of comments: &nbsp</span><span class="rez_text">{{ user.comment_count }}</span></li>
+            <li><span class="def_text">Reputation: &nbsp</span><span class="rez_text">{{ user.reputation }}</span></li>
+        </ul>
+    </div>
         {% for question in questions %}
+            {% if user.id == question.users_id %}
             <div class="mycard" id="{{ question.id }}">
-                <div class="card-panel hoverable white lighten-5" >
+                <div class="card-panel hoverable white   lighten-5" >
                     <div class="topcard">
-                        <p class="time" > {{ question.submission_time }}</p>
-                        <h5 ><a href="/question/{{question['id']}}">{{ question.title }}</a></h5>
-
+                        <p class="time" >{{ question.submission_time }} {{ question.alias }}</p>
+                        <h5 ><a href="/question/{{question['id']}}">
+                             {% if user.id == question.users_id %}
+                                {{ question.title}}
+                            {% endif %}
+                        </a></h5>
                     </div>
-
-                    <hr class="cyan accent-1 ">
+                <hr class="cyan accent-1 ">
                     <div class="bottomcard">
-                            <div class="s12 m2 l2 row ">
+                        <div class="s12 m2 l2 row ">
 
-                                    <div class="col left">
-                                        {% if question.image %}
-                                            <div class="card" style="padding: 5px;">
-                                                <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="70px" style=" margin-top: 5px; padding: 0";>
-                                            </div>
-                                        {% endif %}
+                            <div class="col left">
+                                {% if question.image %}
+                                    <div class="card" style="padding: 5px;">
+                                        <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="70px" style=" margin-top: 5px; padding: 0";>
                                     </div>
-                                   <div class="col  container" style=" height: 130px; margin: 0 0 0 0; padding: 2% 0 0 0;  text-align: left; text-justify: inter-word ;display: flex; flex-direction: column; justify-content: center;">
-                                        <span class=" " style=" height: 70px; margin: 0; padding: 0; overflow: hidden !important; text-align: left; text-overflow: ellipsis; white-space: nowrap ">{{ question.message }}</span>
-                                   </div>
+                                {% endif %}
                             </div>
+                            <div class="col  container" style=" height: 130px; margin: 0 0 0 0; padding: 2% 0 0 0;  text-align: left; text-justify: inter-word ;display: flex; flex-direction: column; justify-content: center;">
 
-                            <div class="card-action"  >
-                                {% if session["id"] == question.users_id or session["id"] == 1 %}
+                                <span class=" " style=" height: 70px; margin: 0; padding: 0; overflow: hidden !important; text-align: left; text-overflow: ellipsis; white-space: nowrap ">
+                                    {% if user.id == question.users_id %}
+                                        {{ question.message }}
+                                    {% endif %}
+                                 </span>
+                            {% for comment in comments %}
+                            {% if comment.question_id == question.id %}
+                                <div style="background-color: aliceblue;color: #629997">
+                                    {% if user.id == question.users_id %}
+                                        Comment:  {{ comment.message }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                            </div>
+                        </div>
+                        <div class="card-action"  >
+                            {% if session["id"] == question.users_id or session["id"] == 1 %}
                                 <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'" style="position: absolute; left: 10px;"><span class="teal-text text-lighten-5" style=" font-weight: bold;"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
                                 {% endif %}
                                 <button class="btn-floating white waves-effect waves-light" style="position: absolute; left: 65px;"><i class="material-icons teal-text  text-lighten-4 " >visibility</i></button><span class="blue-text" style="position: absolute; left: 120px; top: 20px ">{{ question.view_number }}</span>
@@ -106,10 +134,32 @@
                                 <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=plus'" style="position: absolute; right: 90px; top: 10px"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="position: absolute; right: 65px; top: 20px">{{ question.vote_number }}</span>
                                 <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ question.id }}&type_vote=question&operation=minus'" style="position: absolute; right: 15px; top: 10px"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
 
-                            </div>
+                        </div>
+
+                        {% for answer in answers %}
+                            {% if answer.question_id == question.id %}
+                                <div style="background-color: aliceblue;color: #629997">
+                                    {% if user.id == answer.users_id %}
+                                        Answer:  {{ answer.message }}
+                                    {% endif %}
+                                </div>
+                                {% for comment in comments %}
+                            {% if comment.answer_id == answer.id %}
+                                <div style="background-color: aliceblue;color: #629997">
+                                    {% if user.id == comment.users_id %}
+                                        Comment:  {{ comment.message }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                            {% endif %}
+
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     </div>
 {#    </div>#}
@@ -126,3 +176,8 @@
 
 </body>
 </html>
+
+
+
+
+

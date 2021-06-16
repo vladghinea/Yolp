@@ -33,26 +33,42 @@ def sorting(order, questions):
     return ordered_questions
 
 #Adding vote to question or answer
-def add_vote(request_args):
+def add_vote(request_args,session_id):
     if request_args['type_vote'] == 'question':
         questions = data_manager.get_questions()
         for question in questions:
             if question["id"] == int(request_args['id']):
-                if request_args["operation"] == "plus":
-                    data_manager.update_question_vote_plus(question)
-                elif request_args["operation"] == "minus":
-                    data_manager.update_question_vote_minus(question)
-
+                if session_id != int(request_args['id']) :
+                    if session_id != None:
+                        if request_args["operation"] == "plus":
+                            data_manager.update_question_vote_plus(question)
+                            data_manager.update_reputation_question_plus(question)
+                        elif request_args["operation"] == "minus":
+                            data_manager.update_question_vote_minus(question)
+                            data_manager.update_reputation_question_minus(question)
         return "/list"
     elif request_args['type_vote'] == 'answer':
         answers = data_manager.get_answers()
         for answer in answers:
             if answer['id'] == int(request_args['id']):
-                if request_args["operation"] == "plus":
-                    print("am intrat aici?")
-                    data_manager.update_answer_vote_plus(answer)
-                elif request_args["operation"] == "minus":
-                    data_manager.update_answer_vote_minus(answer)
+                if session_id != int(request_args['id']):
+                    if session_id != None:
+                        if request_args["operation"] == "plus":
+                            data_manager.update_answer_vote_plus(answer)
+                            data_manager.update_reputation_answer_plus(answer)
+                        elif request_args["operation"] == "minus":
+                            data_manager.update_answer_vote_minus(answer)
+                            data_manager.update_reputation_answer_minus(answer)
+        return f"/question/{request_args['question_id']}"
+    elif request_args['type_vote'] == 'accepted':
+        answers = data_manager.get_answers()
+        for answer in answers:
+            if answer['id'] == int(request_args['id']):
+                if answer['accepted'] is True:
+                    data_manager.update_answear_accepted_to_fals(answer)
+                else:
+                    data_manager.update_answear_accepted(answer)
+                    data_manager.update_reputation_accepted(answer)
         return f"/question/{request_args['question_id']}"
 
 

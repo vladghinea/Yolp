@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+ Tags
+{% endblock %}
+{%  block content %}
+<table>
+        <thead>
+          <tr>
+              <th>Tag id</th>
+              <th>Tag name</th>
+              <th>How many tags</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        {% for tag in tags %}
+          <tr onclick="window.location='/tag_search?tag_id={{ tag.id }}'">
+            <td>{{ tag.id }}</td>
+            <td>{{ tag.name }}</td>
+            <td>{{ tag.tags_count }}</td>
+
+
+        {% endfor %}
+        </tbody>
+
+      </table>
+
+{% endblock %}

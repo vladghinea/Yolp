@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}
+ Users
+{% endblock %}
+{%  block content %}
+<table>
+        <thead>
+          <tr>
+              <th>Alias</th>
+              <th>User name</th>
+              <th>Registration date</th>
+              <th>Count of asked questions</th>
+              <th>Count of answers</th>
+              <th>Count of comments</th>
+              <th>Reputation</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+          <tr onclick="window.location='/user/{{ user.id }}'">
+              <td>{{ user.alias }}</td>
+              <td>{{ user.username}}</td>
+              <td>{{ user.submission_time}}</td>
+              <td>{{ user.question_count}}</td>
+              <td>{{ user.answer_count}}</td>
+              <td>{{ user.comment_count}}</td>
+              <td>{{ user.reputation }}</td>
+
+        {% endfor %}
+        </tbody>
+
+      </table>
+
+{% endblock %}

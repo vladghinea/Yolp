@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, session
 import os
 import myutility
 import data_manager
+import data_manager_user
 import login
 
 
@@ -13,7 +14,7 @@ app.secret_key = 'DMiKcAZYyICQUsGkGZLfPg'
 vlad = '/home/vlad/projects/ask-mate-3-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-3-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = vlad
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 
@@ -145,17 +146,28 @@ def add_tag(question_id):
                 return render_template("add_tag.html" , question=question)
     else:
         new_tag = request.form['tag']
-        data_manager.add_new_tag(new_tag)
-        tags = data_manager.get_tags()
-        id_tag = tags[-1]['id']
-        data_manager.add_tags_id(question_id,id_tag)
+        dict_tags = data_manager.get_tags()
+        tags=[]
+        for tag in dict_tags:
+            tags.append(tag['name'])
+        if new_tag not in tags:
+            data_manager.add_new_tag(new_tag)
+        tag_id = data_manager.get_tag_id(new_tag)
+        for tag in tag_id:
+            new_tag_id = tag['id']
+        data_manager.add_tags_id(question_id,new_tag_id)
         return redirect(f"/question/{question_id}")
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
 def delete_tag(question_id,tag_id):
-    data_manager.delete_question_tag(tag_id)
-    data_manager.delete_tag(tag_id)
+    data_manager.delete_question_tag(tag_id,question_id)
+    tags = data_manager.get_questions_tag()
+    tags_id =[]
+    for tag in tags:
+        tags_id.append(int(tag['tag_id']))
+    if int(tag_id) not in tags_id:
+        data_manager.delete_tag(tag_id)
     return redirect(f"/question/{question_id}")
 
 
@@ -190,14 +202,12 @@ def question_page(question_id):
 
     else:
         for question in questions:
-
             if question['id'] == question_id:
                 new_views = str(int(question["view_number"]) + 1)
                 data_manager.update_question_views(question_id,int(new_views))
                 question['view_number'] = new_views
                 show_question = question
         for answer in answers:
-
             if answer['question_id'] == question_id:
                 for comment in comments:
                     if answer['id'] == comment['answer_id']:
@@ -251,36 +261,42 @@ def answer_page(question_id):
 @app.route('/add_vote')
 def add_vote_page():
     request_args = request.args
+    session_id = session['id']
+    print(session_id)
     print(request_args)
-    direction = myutility.add_vote(request_args)
+    direction = myutility.add_vote(request_args,session_id)
     central = str(int(request_args['id']))
     return redirect(direction+"#"+central)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def add_question_comment(question_id):
-    new_message = request.form['new_comment_q']
-    users_id = session['id']
-    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data_manager.add_comment_question(question_id, new_message, time,users_id)
+    if session['id'] != None:
+        new_message = request.form['new_comment_q']
+        users_id = session['id']
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        data_manager.add_comment_question(question_id, new_message, time,users_id)
     return redirect(url_for("question_page", question_id=question_id))
 
 
 @app.route('/answer/<answer_id>/new-comment' , methods=['GET','POST'])
 def add_answer_comment(answer_id):
-    new_message = request.form['new_comment_a']
     question_id = request.args['question_id']
-    users_id = session['id']
-    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data_manager.add_comment_answer(answer_id,new_message,time,users_id)
+    if session['id'] != None:
+        new_message = request.form['new_comment_a']
+        users_id = session['id']
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        data_manager.add_comment_answer(answer_id,new_message,time,users_id)
     return redirect(url_for("question_page", question_id=question_id))
 
 
 @app.route('/search', methods=["POST"])
 def search():
-    word = request.form['search'].lower()
+    word = request.form['search']
     questions = data_manager.get_search_questions(word)
     answers = data_manager.get_search_answers(word)
+    tags = data_manager.get_all_tags_with_id()
+    print(tags)
     show_question=[]
     if answers:
         for answer in answers:
@@ -291,7 +307,8 @@ def search():
     for qst in questions:
         if qst not in show_question:
             show_question.append(qst)
-    return render_template("list_search.html", questions=show_question, answers=answers, word=word)
+
+    return render_template("list_search.html", questions=show_question, answers=answers, word=word, tags=tags)
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -328,18 +345,64 @@ def registration():
 @app.route('/user/<user_id>')
 def user_page(user_id):
     user_id = int(user_id)
-    users = data_manager.get_users()
+    users = data_manager_user.get_users()
+    questions = data_manager.get_questions()
+    answers = data_manager.get_answers()
+    comments= data_manager.get_comment()
+
     for user in users:
         if user["id"] == user_id:
-            return render_template('user.html',user=user)
+            print(user)
+            return render_template('user.html', user=user, questions=questions, answers=answers, comments=comments)
     return redirect("/")
 
+@app.route('/users')
+def users_page():
+    all_users = data_manager_user.get_users()
+    users=[]
+    for user in all_users:
+        if user['id'] != 1:
+            users.append(user)
+    return render_template('users.html',users=users)
+
+
+@app.route('/tags')
+def tags_page():
+    tags = data_manager.get_all_data_tags()
+    print(tags)
+    return render_template('tags.html', tags=tags)
+
+@app.route('/tag_search')
+def tags_search():
+    tags = data_manager.get_all_tags_with_id()
+    tag_id = request.args['tag_id']
+    print(tag_id)
+    if tag_id:
+        question_index=[]
+        for tag in tags:
+            if tag['id'] == int(tag_id):
+                print(tag)
+                if tag['ides'] != None:
+                    tag_split = tag['ides'].split(",")
+                    for elem in tag_split:
+                        print(elem)
+                        question_index.append(int(elem.replace(" ","")))
+                else:
+                    return redirect("/tags")
+        show_question=[]
+        questions = data_manager.get_questions()
+        for question in questions:
+            if question['id'] in question_index:
+                show_question.append(question)
+        print(show_question)
+        return render_template('list.html', questions=show_question)
+    return redirect("/tags")
 
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    session["id"] = '3'
+    session["id"] = None
     print(session)
     return redirect(url_for('list_page'))
 

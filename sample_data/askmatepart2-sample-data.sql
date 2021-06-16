@@ -29,7 +29,7 @@ CREATE TABLE users (
     username VARCHAR(100) NOT NULL UNIQUE ,
     password VARCHAR(100) NOT NULL,
     admin BOOLEAN,
-    reputation INTEGER
+    reputation INTEGER default 0
 );
 
 DROP TABLE IF EXISTS public.question;
@@ -52,6 +52,7 @@ CREATE TABLE answer (
     question_id integer,
     users_id INTEGER,
     message text,
+    accepted BOOLEAN default FALSE,
     image text
 );
 
@@ -128,8 +129,8 @@ VALUES ('2014-04-28 16:49:00','codecool','codecool@codecool.com','$2b$12$eYBNWfF
 INSERT INTO users (submission_time, alias, username, password, admin)
 VALUES ('2014-03-28 16:49:00','anonymous','anonimus@admin.com','$2b$12$eYBNWfFoWEw7iHRphGRtNu3QkFi9ur2/2XqCOP9U1Y40O0z8Bu0HC',FALSE);
 
-INSERT INTO question VALUES (0, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?',2,NULL);
-INSERT INTO question VALUES (1, '2017-04-29 09:19:00', 15, 9, 'Wordpress loading multiple jQuery Versions', 'I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $(".myBook").booklet();
+INSERT INTO question VALUES (1, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?',2,NULL);
+INSERT INTO question VALUES (2, '2017-04-29 09:19:00', 15, 9, 'Wordpress loading multiple jQuery Versions', 'I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $(".myBook").booklet();
 
 I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
 
@@ -138,16 +139,16 @@ BUT in my theme i also using jquery via webpack so the loading order is now foll
 jquery
 booklet
 app.js (bundled file with webpack, including jquery)',2, 'images/image1.png');
-INSERT INTO question VALUES (2, '2017-05-01 10:41:00', 2, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin', 'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
+INSERT INTO question VALUES (3, '2017-05-01 10:41:00', 2, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin', 'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
 ',2, NULL);
-SELECT pg_catalog.setval('question_id_seq', 2, true);
+SELECT pg_catalog.setval('question_id_seq', 3, true);
 
-INSERT INTO answer VALUES (1, '2017-04-28 16:49:00', 4, 0, 2,'You need to use brackets: my_list = []',NULL);
-INSERT INTO answer VALUES (2, '2017-04-25 14:42:00', 35, 0, 2,'Look it up in the Python docs', 'images/image2.jpg');
+INSERT INTO answer VALUES (1, '2017-04-28 16:49:00', 4, 1, 2,'You need to use brackets: my_list = []',FALSE,NULL);
+INSERT INTO answer VALUES (2, '2017-04-25 14:42:00', 35, 1, 2,'Look it up in the Python docs',FALSE,'images/image2.jpg');
 SELECT pg_catalog.setval('answer_id_seq', 2, true);
 
-INSERT INTO comment VALUES (1, 0, NULL, 2,'Please clarify the question as it is too vague!', '2017-05-01 05:49:00',0);
-INSERT INTO comment VALUES (2, NULL, 1, 2,'I think you could use my_list = list() as well.', '2017-05-02 16:55:00',0);
+INSERT INTO comment VALUES (1, 2, NULL, 2,'the question is too vague!', '2017-05-01 05:49:00',0);
+INSERT INTO comment VALUES (2, NULL, 1, 2,'my_list = list() as well.', '2017-05-02 16:55:00',0);
 SELECT pg_catalog.setval('comment_id_seq', 2, true);
 
 INSERT INTO tag VALUES (1, 'python');
@@ -155,7 +156,7 @@ INSERT INTO tag VALUES (2, 'sql');
 INSERT INTO tag VALUES (3, 'css');
 SELECT pg_catalog.setval('tag_id_seq', 3, true);
 
-INSERT INTO question_tag VALUES (0, 1);
-INSERT INTO question_tag VALUES (1, 3);
+INSERT INTO question_tag VALUES (1, 1);
 INSERT INTO question_tag VALUES (2, 3);
+INSERT INTO question_tag VALUES (3, 3);
 

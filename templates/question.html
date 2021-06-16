@@ -6,7 +6,7 @@
             <div class="question card-panel">
             <div class="s12 m4 l2 align-center p4" >
              <p class="time" > {{ question.submission_time }}</p>
-                <p class="time">{{ question.alias }}</p>
+                <p class="time">User: {{ question.alias }}</p>
                 <h4 class="center-align p25 ">{{ question.title}}</h4>
                 <br />
             </div>
@@ -22,19 +22,27 @@
             <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="330px">
         {#    {% endif %}#}
             </div>
+            {% if session["id"] == question.users_id or session["id"] == 1 %}
+
             <div style="padding-bottom: 10px">
             <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/question/{{ question.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
             <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/question/{{ question.id }}/edit'">edit</button>
             </div>
+            {% endif %}
+
             <div class="tag-container">
                 {% for tag in tags%}
-            <div class="chip">
-                {{ tag.name }}
-                <i onclick="window.location='/question/{{ question.id }}/tag/{{ tag.id }}/delete'" class="close material-icons">close</i>
-              </div>
-                {% endfor %}
-            <a class="add_tag" href="/question/{{ question.id }}/new-tag">add tag+</a>
 
+            <div class="chip">
+                <a href="/tag_search?tag_id={{ tag.id }}">{{ tag.name }}</a>
+                {% if session['id'] == question.users_id %}
+                <i onclick="window.location='/question/{{ question.id }}/tag/{{ tag.id }}/delete'" class="close material-icons">close</i>
+              {% endif %}
+                </div>
+                {% endfor %}
+            {% if session['id'] == question.users_id %}
+            <a class="add_tag" href="/question/{{ question.id }}/new-tag">add tag+</a>
+            {% endif %}
             </div>
             <div>
             <form method="post" action="/question/{{question.id}}/new-comment">
@@ -45,15 +53,19 @@
             </div>
             {% for comment in comments_question %}
                 {% if comment.message != "" %}
-                    <p class="time">{{ comment.alias }}</p>
+                    <p class="time">User: {{ comment.alias }}</p>
                 <div class="comment_q">
+                {% if session["id"] == comment.users_id or session["id"] == 1 %}
                  <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
+                 {% endif %}
                     <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
                     <span style=" margin: 20px 0">{{ comment.message }}</span>
                     <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                   {% if session["id"] == comment.users_id or session["id"] == 1%}
                     <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
                         <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
                     </button>
+                       {% endif %}
                 </div>
                 {% endif %}
             {% endfor %}
@@ -63,8 +75,22 @@
     <br>
     {% for answer in answers  %}
 
-        <div class="answer card-panel">
-        <p class="time">{{ answer.alias }}</p>
+        <div class="answer card-panel" style="position: relative">
+        <span style="position: absolute; left: 20px; top: 20px">
+            {% if session["id"] == question.users_id or session["id"] == 1 %}
+                {% if answer.accepted %}
+               <button class="btn-floating green waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=accepted&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons white-text  text-lighten-1">done</i></button>
+                {% else %}
+                <button class="btn-floating red waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=accepted&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons white-text  text-lighten-1">done</i></button>
+                {% endif %}
+                {% else %}
+                {% if answer.accepted %}
+                     <span style="color: #22b422">Accepted</span>
+                    {% endif %}
+
+            {% endif %}
+        </span>
+        <span class="time">User: {{ answer.alias }}</span>
             <p>answer: <span class="time" > {{ answer.submission_time }}</span></p>
             <p class="mybody-text" id="{{ answer.id }}">
                 {{ answer.message }}
@@ -73,9 +99,10 @@
                 <img src="/static/images/uploads/{{ answer['image'] }}" alt="" height="70px"><br>
             {% endif %}
 
+            {% if session["id"] == answer.users_id or session["id"] == 1%}
              <button class="btn-floating white lighten-2 waves-effect waves-light " onclick="window.location='/answer/{{ answer.id }}/delete'"><span class="teal-text text-lighten-5" style="font-weight: bold"><i class="material-icons pink-text text-lighten-3">delete_forever</i></span></button>
             <button class="btn-floating orange waves-effect waves-light" onclick="window.location='/answer/{{ answer.id }}/edit'">edit</button>
-{#             <button class="btn white lighten-4 waves-effect waves-light z-depth-2" onclick="window.location='/add_vote?name={{ answer.id }}&type_vote=answer&id={{ answer.question_id }}'" style="margin-left: 20vh"> <span class="green-text text-lighten-1" style="font-weight: bold">vote: {{ answer.vote_number }}</span></button>#}
+        {% endif %}
              <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=plus'" style="margin-left: 20vh; z-index: 1000;"> <i class="material-icons teal-text  text-lighten-3">thumb_up</i></button><span class="blue-text " style="margin-left: 10px">{{ answer.vote_number }}</span>
              <button class="btn-floating white waves-effect waves-light" onclick="window.location='/add_vote?id={{ answer.id }}&type_vote=answer&question_id={{ answer.question_id }}&operation=minus'" style="margin-left: 5px; z-index: 1000;"> <i class="material-icons red-text  text-lighten-3">thumb_down</i></button>
             <form method="post" action="/answer/{{answer.id}}/new-comment?question_id={{ answer.question_id }}">
@@ -87,18 +114,19 @@
 
                 {% if comment.answer_id == answer.id %}
                     {% if comment.message != "" %}
-                        <p class="time">{{ comment.alias }}</p>
+                        <p class="time">User: {{ comment.alias }}</p>
                     <div class="comment_a">
+                    {% if session["id"] == comment.users_id or session["id"] == 1 %}
                     <img onclick="window.location='/comment/{{ comment.id }}/edit'"  src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px; cursor:pointer">
-{#                         <img onclick="window.location='/comments/{{ comment.id }}/delete'" src="{{ url_for('static', filename='/images/comment_in.svg') }}" alt="icon" height="27px" style=" position: absolute; alignment: right; padding: 0 20px 0 0; top: 0px; left: 1px;">#}
+                    {% endif %}
                         <span style = " position: absolute; left: 30px;">{{ comment.submission_time }}</span>
                         <span style=" margin: 20px 0">{{ comment.message }}</span>
                         <span style="position: absolute; right: 30px">Edited {{ comment.edited_count }} times</span>
+                    {% if session["id"] == comment.users_id or session["id"] == 1 %}
                         <button class="btn-floating waves-effect waves-light grey lighten-3" onclick="window.location='/comments/{{ comment.id }}/delete'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">
                         <span style="position: relative; bottom: 7px"><i class="material-icons teal-text text-lighten-1">delete_forever</i></span>
-{#                        <button class="btn-floating gray waves-effect waves-light" onclick="window.location='/comment/{{ comment.id }}/edit'" style="position: absolute; right: 1px; height: 25px; width: 25px; top: 1px; font-size: 10px;">#}
-{#                            <span style="position: relative; bottom: 7px">edit</span>#}
                         </button>
+                        {% endif %}
                     </div>
                         {% endif %}
                  {% endif %}
@@ -107,7 +135,10 @@
         </div>
 
     {% endfor %}
-
+    {% if session["id"] != question.users_id %}
+        {% if session['id'] != None %}
     <a href="/question/{{ question.id }}/new-answer" class="btn-floating blue pulse"> add</a>
+            {% endif %}
+    {% endif %}
 
 {% endblock %}
