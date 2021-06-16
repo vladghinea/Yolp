@@ -73,7 +73,7 @@
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
         <div class="user_container">
             <ul class="user">
-                <li><span>User Details</span></li>
+                <li><span class="text_grey_bold">User Details</span></li>
                 <li><span class="def_text">User id: &nbsp</span> <span class="rez_text">{{ user.id }}</span></li>
                 <li><span class="def_text">User alias: &nbsp</span> <span class="rez_text">{{ user.alias }} </span></li>
                 <li><span class="def_text">User email: &nbsp</span> <span class="rez_text">{{ user.username }}</span> </li>
@@ -88,11 +88,11 @@
 
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
         <div class="user_container">
-        <span>Questions:</span><br>
+        <span class="text_grey_bold">Questions</span><br>
         {% for question in questions %}
             {% if user.id == question.users_id %}
-              <span>Tilte:</span>  <a class="user_link" href="/question/{{question['id']}}">{{ question.title }}</a><br>
-              <span>Message:</span>  {{ question.message }}<br><hr>
+              <span class="text_blue">Tilte:</span>  <a class="user_link" href="/question/{{question['id']}}">{{ question.title }}</a><br>
+              <span class="text_blue">Message:</span>  {{ question.message }}<br><hr>
             {% endif %}
         {% endfor %}
         </div>
@@ -100,10 +100,10 @@
 
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
         <div class="user_container">
-        <span>Answers:</span><br>
+        <span class="text_grey_bold">Answers:</span><br>
         {% for answer in answers %}
             {% if user.id == answer.users_id %}
-                <span>Message:</span> <a class="user_link" href="/question/{{answer['question_id']}}">  {{ answer.message }}</a><br><hr>
+                <span class="text_blue">Message:</span> <a class="user_link" href="/question/{{answer['question_id']}}">  {{ answer.message }}</a><br><hr>
             {% endif %}
         {% endfor %}
         </div>
@@ -111,15 +111,15 @@
 
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
         <div class="user_container">
-        <span>Comments:</span><br>
+        <span class="text_grey_bold">Comments</span><br>
         {% for comment in comments %}
             {% if user.id == comment.users_id %}
                 {% if comment.question_id != None%}
-                <span>Title:</span><a class="user_link" href="/question/{{comment['question_id']}}">  {{ comment.message }}</a><br><hr>
+                <span class="text_blue">Title:</span><a class="user_link" href="/question/{{comment['question_id']}}">  {{ comment.message }}</a><br><hr>
                 {% else %}
                     {% for answer in answers %}
                         {% if comment.answer_id == answer.id %}
-                            <span>Answer:</span>
+                            <span class="text_blue">Answer:</span>
                             <a class="user_link" href="/question/{{answer.question_id}}"> {{ comment.message }}</a><br><hr>
                         {% endif %}
                     {% endfor %}

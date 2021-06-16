@@ -75,8 +75,8 @@
     <div class="container row s12 m4 l8 card-panel hoverable transparent " id="inplansa">
         {% for question in questions %}
             <div class="mycard" id="{{ question.id }}">
-                <div class="card-panel hoverable white   lighten-5" >
-                    <div class="topcard">
+                <div class="card-panel hoverable white   lighten-5" style="padding-bottom: 1px">
+                    <div class="topcard" >
                         <p class="time" >{{ question.submission_time }}</p>
                         <h5 ><a href="/question/{{question['id']}}">
                              {% if word in question.title.lower()%}
@@ -87,13 +87,13 @@
                         </a></h5>
                     </div>
                 <hr class="cyan accent-1 ">
-                    <div class="bottomcard">
+                    <div class="bottomcard" >
                         <div class="s12 m2 l2 row ">
 
                             <div class="col left">
                                 {% if question.image %}
                                     <div class="card" style="padding: 5px;">
-                                        <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="70px" style=" margin-top: 5px; padding: 0";>
+                                        <img src="/static/images/uploads/{{ question['image'] }}" alt="" height="100px" style=" margin-top: 5px; padding: 0";>
                                     </div>
                                 {% endif %}
                             </div>
@@ -122,8 +122,9 @@
 
                         {% for answer in answers %}
                             {% if answer.question_id == question.id %}
-                                <div style="background-color: aliceblue;color: #629997">
+                                <div class="answer card-panel" style="background-color: aliceblue;color: #629997; margin: 20px; padding: 5px;  text-align: center">
                                     {% if word in answer.message %}
+                                        <span class="time">Answer:</span><br>
                                         {{ answer.message.replace(word, '<span style="background-color: #a0e0dc;">{}</span>'.format(word))|safe}}
                                     {% else %}
                                         {{ answer.message }}

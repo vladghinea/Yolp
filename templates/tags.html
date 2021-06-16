@@ -5,7 +5,7 @@
 {%  block content %}
 <table>
         <thead>
-          <tr>
+          <tr class="tag_head">
               <th>Tag id</th>
               <th>Tag name</th>
               <th>How many tags</th>
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
         {% for tag in tags %}
-          <tr onclick="window.location='/tag_search?tag_id={{ tag.id }}'">
+          <tr class="tag_list" onclick="window.location='/tag_search?tag_id={{ tag.id }}'">
             <td>{{ tag.id }}</td>
             <td>{{ tag.name }}</td>
             <td>{{ tag.tags_count }}</td>

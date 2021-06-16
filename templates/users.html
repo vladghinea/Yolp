@@ -5,7 +5,7 @@
 {%  block content %}
 <table>
         <thead>
-          <tr>
+          <tr class="users_table_head">
               <th>Alias</th>
               <th>User name</th>
               <th>Registration date</th>
@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         {% for user in users %}
-          <tr onclick="window.location='/user/{{ user.id }}'">
+          <tr class="users_table_row" onclick="window.location='/user/{{ user.id }}'">
               <td>{{ user.alias }}</td>
               <td>{{ user.username}}</td>
               <td>{{ user.submission_time}}</td>

@@ -183,15 +183,43 @@ button {
 
 }
 .def_text {
-    font-size: 20px;
+    font-size: 16px;
     color: #084941;
 }
 .rez_text {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     color: brown;
 }
 
 .user_link:hover {
     color: orange;
+}
+
+.users_table_row, .tag_list {
+
+    color: #50905b;
+     font-weight: bold;
+
+}
+
+
+.users_table_row:hover, .tag_list:hover {
+    background-color: #fa35ab;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.users_table_head, .tag_head {
+    color: #0759a7;
+    font-weight: bold;
+}
+
+.text_blue {
+    color: dodgerblue;
+}
+.text_grey_bold {
+    color: #80ba8e;
+    font-weight: bold;
 }

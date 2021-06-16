@@ -14,7 +14,7 @@ app.secret_key = 'DMiKcAZYyICQUsGkGZLfPg'
 vlad = '/home/vlad/projects/ask-mate-3-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-3-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = vlad
+app.config['IMAGE_UPLOADS'] = lamine
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 
