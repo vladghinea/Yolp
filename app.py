@@ -261,6 +261,7 @@ def answer_page(question_id):
 @app.route('/add_vote')
 def add_vote_page():
     request_args = request.args
+
     if "id" in session:
         session_id = session['id']
         direction = myutility.add_vote(request_args,session_id)
