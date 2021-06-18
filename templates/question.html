@@ -135,10 +135,12 @@
         </div>
 
     {% endfor %}
+    {% if 'id' in session %}
     {% if session["id"] != question.users_id %}
         {% if session['id'] != None %}
     <a href="/question/{{ question.id }}/new-answer" class="btn-floating blue pulse"> add</a>
             {% endif %}
+    {% endif %}
     {% endif %}
 
 {% endblock %}

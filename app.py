@@ -14,7 +14,7 @@ app.secret_key = 'DMiKcAZYyICQUsGkGZLfPg'
 vlad = '/home/vlad/projects/ask-mate-3-python-vladghinea/static/images/uploads/'
 lamine = '/home/keitkalon/projects/web/ask-mate-3-python-vladghinea/static/images/uploads'
 home = os.path.join(app.root_path, 'static/images/uploads')
-app.config['IMAGE_UPLOADS'] = lamine
+app.config['IMAGE_UPLOADS'] = home
 app.config['ALLOWED_IMAGE_EXTENSION'] = ['PNG', 'JPG', 'JPEG']
 
 
@@ -261,14 +261,12 @@ def answer_page(question_id):
 @app.route('/add_vote')
 def add_vote_page():
     request_args = request.args
-
-    session_id = session['id']
-    print(session_id)
-    print(request_args)
-    direction = myutility.add_vote(request_args,session_id)
-    central = str(int(request_args['id']))
-    return redirect(direction+"#"+central)
-
+    if "id" in session:
+        session_id = session['id']
+        direction = myutility.add_vote(request_args,session_id)
+        central = str(int(request_args['id']))
+        return redirect(direction+"#"+central)
+    return redirect("/")
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def add_question_comment(question_id):
@@ -297,7 +295,6 @@ def search():
     questions = data_manager.get_search_questions(word)
     answers = data_manager.get_search_answers(word)
     tags = data_manager.get_all_tags_with_id()
-    print(tags)
     show_question=[]
     if answers:
         for answer in answers:
